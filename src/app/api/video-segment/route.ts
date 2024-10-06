@@ -22,7 +22,7 @@ export async function GET(req: Request) {
     }
 
     // 视频文件路径
-    const videoPath = path.resolve('./public/example-fragment.mp4');
+    const videoPath = path.resolve('./public/many-t.mp4');
 
     // 检查文件是否存在
     if (!fs.existsSync(videoPath)) {
@@ -34,7 +34,7 @@ export async function GET(req: Request) {
     console.log('Video size:', videoSize);
 
     // 解析 Range 请求头的开始和结束字节
-    const CHUNK_SIZE = 5 * 10 * 10 ** 6; // 每次返回 50MB 的数据
+    const CHUNK_SIZE = 20 * 1024 * 1024; // 每次返回 5MB 的数据
 
     // 使用正则表达式提取 Range 的开始和结束字节
     const rangeMatch = range.match(/bytes=(\d*)-(\d*)/);
