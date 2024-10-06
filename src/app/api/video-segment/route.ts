@@ -17,7 +17,7 @@ function nodeReadableToWebReadable(nodeReadable: fs.ReadStream) {
 export async function GET(req: Request) {
     const range = req.headers.get('range');
     console.log('range', range);
-    let paths = './public/esp32_01.mp4';
+    let paths = './public/frag_bunny.mp4';
     // let paths = './public/many-t.mp4'; 不要用分片，对于默认的视频播放器，分片会导致视频无法播放
 
     if (!range) {
@@ -27,6 +27,7 @@ export async function GET(req: Request) {
                 'Content-Length': fs.statSync(path.resolve(paths)).size.toString(),
                 'Accept-Ranges': 'bytes',
                 'Content-Range': `bytes 0-${fs.statSync(path.resolve(paths)).size - 1}/${fs.statSync(path.resolve(paths)).size}`,
+                'Cache-Control': 'public, max-age=3600', //1h
             },
             status: 200,
         });
@@ -85,6 +86,7 @@ export async function GET(req: Request) {
         'Accept-Ranges': 'bytes',
         'Content-Length': contentLength.toString(),
         'Content-Type': 'video/mp4',
+        'Cache-Control': 'public, max-age=3600', //1h
     };
 
     return new Response(webReadableStream, {
