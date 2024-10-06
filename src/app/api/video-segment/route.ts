@@ -34,7 +34,7 @@ export async function GET(req: Request) {
     console.log('Video size:', videoSize);
 
     // 解析 Range 请求头的开始和结束字节
-    const CHUNK_SIZE = 10 ** 6; // 每次返回 1MB 的数据
+    const CHUNK_SIZE = 5 * 10 * 10 ** 6; // 每次返回 50MB 的数据
 
     // 使用正则表达式提取 Range 的开始和结束字节
     const rangeMatch = range.match(/bytes=(\d*)-(\d*)/);

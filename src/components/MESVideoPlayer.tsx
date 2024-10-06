@@ -4,7 +4,7 @@ import React, {useEffect, useRef} from "react";
 export const MSEVideoPlayer = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    const chunkSize = 1024 * 1024;
+    const chunkSize = 5 * 10 * 1024 * 1024;
     const videUrl = '/api/video-segment';
     let mediaSource: MediaSource | null = null;
     let videoElement: HTMLVideoElement | null = null;
@@ -26,6 +26,7 @@ export const MSEVideoPlayer = () => {
         mediaSource = new MediaSource();
         videoElement.src = URL.createObjectURL(mediaSource);
         mediaSource.addEventListener('sourceopen', async () => {
+            console.log('MediaSource opened');
             sourceBuffer = mediaSource?.addSourceBuffer(mimeCodec);
 
             await fetchVideoChunks(videUrl);
@@ -34,29 +35,72 @@ export const MSEVideoPlayer = () => {
 
 
     const fetchVideoChunks = async (url: string) => {
-        let start = 0;
-        let isEnded = false;
-        while (!isEnded) {
-            const chunk = await fetchChunk(url, start, start + chunkSize - 1)
-            console.log("chunks--------", chunk, start, totalSize);
-            if (chunk) {
-                if (!sourceBuffer?.updating) {
-                    sourceBuffer?.appendBuffer(chunk);
-                } else {
-                    sourceBuffer?.addEventListener('updateend', () => {
-                        sourceBuffer?.appendBuffer(chunk);
-                    });
-                }
-                start += chunkSize;
+
+        const chunk = await fetchChunk(url, 0, chunkSize - 1);
+        if (chunk) {
+            if (!sourceBuffer?.updating) {
+                console.log(videoElement?.error)
+                sourceBuffer?.appendBuffer(chunk);
             } else {
-                console.log('is end')
-                isEnded = true;
                 sourceBuffer?.addEventListener('updateend', () => {
-                    console.log("endOfStream");
-                    mediaSource?.endOfStream();
+                    sourceBuffer?.appendBuffer(chunk);
                 });
             }
         }
+        let loadedDataLength = chunkSize;
+
+        let isProcessing = false;
+
+        const loadChunks = async () => {
+            if (isProcessing) return;
+            isProcessing = true;
+            try {
+                const percent = videoElement?.currentTime / videoElement?.duration;
+                const currentLocation = Math.floor(totalSize * percent);
+
+                console.log("current", currentLocation, currentLocation * 1.2, "loaded", loadedDataLength)
+
+                if (loadedDataLength < currentLocation * 1.4) {
+                    console.log("remove before", loadedDataLength, currentLocation, loadedDataLength < currentLocation * 1.2);
+
+                    const chunk = await fetchChunk(url, loadedDataLength, loadedDataLength + chunkSize - 1)
+                    console.log("remove await", loadedDataLength, currentLocation, loadedDataLength < currentLocation * 1.2);
+
+                    if (chunk) {
+                        if (!sourceBuffer?.updating) {
+                            console.log(videoElement?.error)
+                            sourceBuffer?.appendBuffer(chunk);
+                        } else {
+                            sourceBuffer?.addEventListener('updateend', () => {
+                                sourceBuffer?.appendBuffer(chunk);
+                            }, {once: true});
+                        }
+
+                        const removedTime = Math.min(videoElement?.currentTime, sourceBuffer.buffered.end(0)) - 4;
+                        const removedStartTime = sourceBuffer.buffered.start(0);
+                        console.log("time", removedStartTime, removedTime)
+
+                        if (!sourceBuffer?.updating) {
+
+                            sourceBuffer?.remove(0, removedTime);
+                        } else {
+                            sourceBuffer?.addEventListener('updateend', () => {
+                                sourceBuffer?.remove(0, removedTime);
+                            }, {once: true});
+                        }
+                        loadedDataLength += chunkSize;
+                        console.log("remove after loadedDataLength", loadedDataLength, currentLocation, loadedDataLength < currentLocation * 1.2);
+                    }
+                }
+
+            } catch (e) {
+                console.error(e);
+            } finally {
+                isProcessing = false;
+            }
+        };
+        videoElement?.addEventListener("timeupdate", loadChunks)
+        videoElement?.addEventListener("seeked", loadChunks)
     };
 
 
@@ -86,5 +130,13 @@ export const MSEVideoPlayer = () => {
         handleSourceOpen().catch(console.error);
     }, []);
 
-    return <video ref={videoRef} controls width="600"/>;
+    const handleClick = () => {
+        console.log("remove", sourceBuffer?.buffered.start(0), sourceBuffer?.buffered.end(0));
+        sourceBuffer?.remove(0, 10)
+    }
+
+    return (<>
+        <video ref={videoRef} controls width="600"/>
+        <button onClick={handleClick}> remove</button>
+    </>);
 };
