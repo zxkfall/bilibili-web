@@ -1,4 +1,4 @@
-import SelfBlog from "@/components/SelfBlog";
+import IndexPage from "@/components/IndexPage";
 import {CardData} from "@/app/api/cards/route";
 
 const Home = async () => {
@@ -27,7 +27,7 @@ const Home = async () => {
 
     return (
         <>
-            <SelfBlog cardData={cardData} latestData={latestData}/>
+            <IndexPage cardData={cardData} latestData={latestData}/>
         </>
     );
 };

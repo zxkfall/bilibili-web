@@ -1,10 +1,9 @@
-import type {} from '@mui/material/themeCssVarsAugmentation';
-import { ThemeOptions, PaletteMode } from '@mui/material/styles';
-import { getDesignTokens } from './themePrimitives';
+import {PaletteMode, ThemeOptions} from '@mui/material/styles';
+import {getDesignTokens} from './themePrimitives';
 import {
-  inputsCustomizations,
   dataDisplayCustomizations,
   feedbackCustomizations,
+  inputsCustomizations,
   navigationCustomizations,
   surfacesCustomizations,
 } from './customizations';
