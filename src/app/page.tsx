@@ -1,17 +1,35 @@
-"use client";
-import {useEffect} from "react";
-import {Button} from "@mui/material";
-import Layout from "@/components/Layout";
+import SelfBlog from "@/components/SelfBlog";
+import {CardData} from "@/app/api/cards/route";
 
-export default function Home() {
+const Home = async () => {
+
+    const blogsResponse = await fetch('http://localhost:3000/api/cards')
+        .then((res) => {
+            return res.json();
+        })
+        .catch((err) => {
+            console.log(err);
+            return null;
+        });
+
+    const latesedResponse = await fetch('http://localhost:3000/api/articles/latested')
+        .then((res) => {
+            return res.json();
+        })
+        .catch((err) => {
+            console.log(err);
+            return null;
+        });
+
+    const cardData = blogsResponse && blogsResponse.data as CardData[] || [];
+
+    const latestData = latesedResponse && latesedResponse.data || [];
+
     return (
         <>
-            <Layout>
-                <Button variant="contained">click me</Button>
-                {"wefw fefw f".repeat(1000)}
-            </Layout>
-
+            <SelfBlog cardData={cardData} latestData={latestData}/>
         </>
     );
-}
+};
 
+export default Home;
