@@ -8,23 +8,23 @@ import Latest from "@/components/Latest";
 import Footer from "@/components/Footer";
 import {CardData} from "@/app/api/cards/route";
 import {ArticleInfo} from "@/app/api/articles/latested/route";
+import SubMenu from "@/components/SubMenu";
 
-interface IndexPageContainerProps {
+export default function IndexPageContainer({cardData, latestData}: {
     cardData: CardData[];
     latestData: ArticleInfo[];
-}
-
-export default function IndexPageContainer({cardData, latestData}: IndexPageContainerProps) {
+}) {
 
     return (
         <Box sx={{height: '100dvh', display: 'flex', flexDirection: 'column'}}>
             <Header/>
+            <SubMenu/>
             <Box sx={{flex: '1 1', overflow: 'visible'}}>
                 <CssBaseline enableColorScheme/>
                 <Container
                     maxWidth="lg"
                     component="main"
-                    sx={{display: 'flex', flexDirection: 'column', mb: 16, mt: 4, gap: 4}}
+                    sx={{display: 'flex', flexDirection: 'column', mb: 16, mt: 3, gap: 4}}
                 >
                     <SelfMainContent cardData={cardData}/>
                     <Latest articleInfo={latestData}/>
