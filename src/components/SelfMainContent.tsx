@@ -55,15 +55,22 @@ const StyledTypography = styled(Typography)({
 
 
 export const Search = () => (
-    <FormControl sx={{width: {xs: '100%', md: '25ch'}}} variant="outlined">
+    <FormControl sx={{width: {xs: '100%', md: '100%'}}} variant="outlined">
         <OutlinedInput
             size="small"
             id="search"
             placeholder="Search…"
             sx={{flexGrow: 1}}
-            startAdornment={
+            endAdornment={
                 <InputAdornment position="start" sx={{color: 'text.primary'}}>
-                    <SearchRoundedIcon fontSize="small"/>
+                    <IconButton size="small" aria-label="search" sx={{
+                        border: 'none',
+                        backgroundColor: 'transparent',
+                        height: '24px',
+                        width: '24px',
+                    }}>
+                        <SearchRoundedIcon fontSize="small"/>
+                    </IconButton>
                 </InputAdornment>
             }
             inputProps={{
@@ -162,7 +169,6 @@ const SelfMainContent = ({cardData}: SelfMainContentProps) => {
                     overflow: 'auto',
                 }}
             >
-                <Search/>
                 <IconButton size="small" aria-label="RSS feed">
                     <RssFeedRoundedIcon/>
                 </IconButton>

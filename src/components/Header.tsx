@@ -14,6 +14,8 @@ import CardMedia from "@mui/material/CardMedia";
 import Sitemark from "@/components/icons/SitemarkIcon";
 import MenuIcon from "@mui/icons-material/Menu";
 import Drawer from "@mui/material/Drawer";
+import {Search} from "@/components/SelfMainContent";
+import LoginPopup from "@/components/LoginPopup";
 
 const StyledAppBar = styled(AppBar)(({theme}) => ({
     position: 'relative',
@@ -31,10 +33,11 @@ const StyledAppBar = styled(AppBar)(({theme}) => ({
 }));
 
 const Header = () => {
+    const menuItems = ["番剧", "直播", "游戏中心", "会员购", "漫画", "赛事"];
+
     const [open, setOpen] = useState(false);
 
     const {themeType, setThemeType, mode, setMode, theme} = useCustomTheme();
-
     const themeRef = React.useRef(theme);
     const headerRef = React.useRef<HTMLDivElement>(null);
 
@@ -114,42 +117,18 @@ const Header = () => {
                         <Sitemark/>
                     </Button>
                     <Box sx={{flexGrow: 1, display: 'flex', alignItems: 'center', px: 0}}>
-                        <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-                            <Button variant="text" color="info" size="small">
-                                Features
-                            </Button>
-                            <Button variant="text" color="info" size="small">
-                                Testimonials
-                            </Button>
-                            <Button variant="text" color="info" size="small">
-                                Highlights
-                            </Button>
-                            <Button variant="text" color="info" size="small">
-                                Pricing
-                            </Button>
-                            <Button variant="text" color="info" size="small" sx={{minWidth: 0}}>
-                                FAQ
-                            </Button>
-                            <Button variant="text" color="info" size="small" sx={{minWidth: 0}}>
-                                Blog
-                            </Button>
+                        <Box sx={{display: {xs: 'none', md: 'flex', minWidth: 'fit-content'}}}>
+                            {menuItems.map((item, index) => (
+                                <Button key={index} variant="text" color="info" size="small"
+                                        sx={{px: 1, minWidth: 'fit-content'}}>
+                                    {item}
+                                </Button>
+                            ))}
                         </Box>
-                        <Box
-                            sx={{
-                                display: {xs: 'none', md: 'flex'},
-                                gap: 1,
-                                alignItems: 'center',
-                            }}
-                        >
-                            <Button color="primary" variant="text" size="small">
-                                Sign in
-                            </Button>
-                            <Button color="primary" variant="contained" size="small">
-                                Sign up
-                            </Button>
-                        </Box>
+                        <Search/>
                     </Box>
-                    <Box sx={{display: 'flex', gap: 1}}>
+                    <Box sx={{display: 'flex', gap: 1, alignItems: 'center', ml: 1}}>
+                        <LoginPopup theme={theme}/>
                         <FormControl variant="outlined" sx={{minWidth: {lg: 180, md: 160}}}>
                             <Select
                                 size="small"
@@ -178,12 +157,9 @@ const Header = () => {
                             </IconButton>
                             <Drawer anchor="top" open={open} onClose={toggleDrawer(false)}>
                                 <Box sx={{p: 2, backgroundColor: 'background.default', mt: 7}}>
-                                    <MenuItem>Features</MenuItem>
-                                    <MenuItem>Testimonials</MenuItem>
-                                    <MenuItem>Highlights</MenuItem>
-                                    <MenuItem>Pricing</MenuItem>
-                                    <MenuItem>FAQ</MenuItem>
-                                    <MenuItem>Blog</MenuItem>
+                                    {menuItems.map((item, index) => (
+                                        <MenuItem key={index}>{item}</MenuItem>
+                                    ))}
                                     <MenuItem>
                                         <Button color="primary" variant="contained" fullWidth>
                                             Sign up
