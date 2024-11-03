@@ -22,8 +22,7 @@ const Carousel = () => {
 
     useEffect(() => {
         const sliderContainer = document.getElementById(carouselId)!
-
-        const listener = () => {
+        const transitionEndListener = () => {
             const curIndex = currentIndexRef.current;
             if (curIndex === images.length + 1) {
                 setShowAn(() => false)
@@ -35,9 +34,9 @@ const Carousel = () => {
             }
             setTransitionEnded(() => true)
         };
-        sliderContainer.addEventListener('transitionend', listener)
+        sliderContainer.addEventListener('transitionend', transitionEndListener)
         return () => {
-            sliderContainer.removeEventListener('transitionend', listener)
+            sliderContainer.removeEventListener('transitionend', transitionEndListener)
         }
     }, []);
 
@@ -56,6 +55,11 @@ const Carousel = () => {
             setShowAn(true)
             setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length + 2) % (images.length + 2));
         }
+    };
+
+    const handleDotClick = (index: number) => {
+        setShowAn(true)
+        setCurrentIndex(index + 1); // +1 因为我们有一个前置和后置的图片
     };
 
 
@@ -104,6 +108,31 @@ const Carousel = () => {
             >
                 <ArrowForward/>
             </IconButton>
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    position: 'absolute',
+                    bottom: '10px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                }}
+            >
+                {images.map((_, index) => (
+                    <Box
+                        key={index}
+                        onClick={() => handleDotClick(index)}
+                        sx={{
+                            width: '12px',
+                            height: '12px',
+                            borderRadius: '50%',
+                            backgroundColor: currentIndex === index + 1 ? 'primary.main' : 'grey',
+                            margin: '0 8px',
+                            cursor: 'pointer',
+                        }}
+                    />
+                ))}
+            </Box>
         </Box>
     );
 };
