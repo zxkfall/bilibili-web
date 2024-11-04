@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Box, IconButton} from '@mui/material';
 import {ArrowForward, ArrowBack} from '@mui/icons-material';
+import styles from './Carousel.module.css'
 
 const Carousel = () => {
     const images = [
@@ -12,13 +13,20 @@ const Carousel = () => {
     const carouselId = 'carouselId'
 
     const [currentIndex, setCurrentIndex] = useState(1);
+    const [previousIndex, setPreviousIndex] = useState(1)
     const [showAn, setShowAn] = useState(true)
     const currentIndexRef = useRef(currentIndex);
     const [transitionEnded, setTransitionEnded] = useState(true)
+    const preIndexRef = useRef(1)
 
     useEffect(() => {
         currentIndexRef.current = currentIndex;
     }, [currentIndex]);
+
+    useEffect(() => {
+        console.log(currentIndex, preIndexRef.current)
+        preIndexRef.current = currentIndex;
+    });
 
     useEffect(() => {
         const sliderContainer = document.getElementById(carouselId)!
@@ -61,6 +69,8 @@ const Carousel = () => {
         setShowAn(true)
         setCurrentIndex(index + 1); // +1 因为我们有一个前置和后置的图片
     };
+
+    const getMouthClass = (curIndex: number, preIndex: number, leftMouth: string, rightMouth: string): string => (curIndex > preIndex && rightMouth || curIndex < preIndex && leftMouth) as string;
 
 
     return (
@@ -122,16 +132,39 @@ const Carousel = () => {
                     <Box
                         key={index}
                         onClick={() => handleDotClick(index)}
-                        sx={{
-                            width: '12px',
-                            height: '12px',
-                            borderRadius: '50%',
-                            backgroundColor: currentIndex === index + 1 ? 'primary.main' : 'grey',
-                            margin: '0 8px',
-                            cursor: 'pointer',
-                        }}
-                    />
+                        className={(currentIndex === index + 1) ? styles.shrunkSizeAn : styles.clearAn} sx={{
+                        width: 'var(--circle-diameter)',
+                        height: 'var(--circle-diameter)',
+                        borderRadius: '50%',
+                        backgroundColor: 'transparent',
+                        m: 1,
+                        mb: 2,
+                        cursor: 'pointer',
+                    }}
+                    >
+                        <Box
+                            className={`${(currentIndex === index + 1) && getMouthClass(currentIndex, preIndexRef.current, styles.topCircleAnL, styles.topCircleAnR)} ${styles.halfCircle}`}
+                            style={{
+                                transform: 'rotate(90deg)',
+                                backgroundColor: currentIndex === index + 1 ? 'lightblue' : 'grey',
+                            }}></Box>
+                        <Box
+                            className={`${(currentIndex === index + 1) && getMouthClass(currentIndex, preIndexRef.current, styles.bottomCircleAnL, styles.bottomCircleAnR)} ${styles.halfCircle}`}
+                            style={{
+                                transform: 'rotate(-90deg)',
+                                backgroundColor: currentIndex === index + 1 ? 'lightblue' : 'grey',
+                            }}></Box>
+                    </Box>
                 ))}
+
+            </Box>
+
+            <Box sx={{
+                width: 'var(--circle-diameter)',
+                height: 'var(--circle-diameter)',
+            }}>
+                <div className={styles.topHalfCircle}></div>
+                <div className={styles.bottomHalfCircle}></div>
             </Box>
         </Box>
     );

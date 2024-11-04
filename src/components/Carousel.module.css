@@ -1,0 +1,121 @@
+@keyframes shrunkSize {
+    0% {
+        transform: scale(1);
+        /*clip-path: circle(50%);*/
+    }
+    25% {
+        transform: scale(1.4);
+        /*clip-path: ellipse(60% 50% at 50% 50%);*/
+    }
+    50% {
+        transform: scale(1);
+        /*clip-path: circle(50%);*/
+    }
+    100% {
+        transform: scale(1.4);
+        /*clip-path: ellipse(60% 50% at 50% 50%);*/
+    }
+}
+
+.topHalfCircle {
+    position: absolute;
+    width: var(--circle-diameter);
+    height: var(--circle-diameter);
+    transform: rotate(90deg);
+    clip: rect(0px, calc(1 / 2 * var(--circle-diameter)), var(--circle-diameter), 0px); /* 这个clip属性用来绘制半圆，在clip的rect范围内的内容显示出来，使用clip属性，元素必须是absolute的 */
+    border-radius: calc(1 / 2 * var(--circle-diameter));
+    background-color: yellow;
+    -webkit-animation: an1L 1s infinite linear;
+}
+
+.bottomHalfCircle {
+    position: absolute;
+    width: var(--circle-diameter);
+    height: var(--circle-diameter);
+    transform: rotate(-90deg);
+    clip: rect(0px, calc(1 / 2 * var(--circle-diameter)), var(--circle-diameter), 0px);
+    border-radius: calc(1 / 2 * var(--circle-diameter));
+    background-color: yellow;
+    -webkit-animation: an2L 1s infinite linear;
+}
+
+.clearAn {
+    animation: none;
+}
+
+.topCircleAnR {
+    animation: an1 0.5s linear;
+}
+
+.bottomCircleAnR {
+    animation: an2 0.5s linear;
+}
+
+.topCircleAnL {
+    animation: an1L 0.5s linear;
+}
+
+.bottomCircleAnL {
+    animation: an2L 0.5s linear;
+}
+
+.shrunkSizeAn {
+    animation: shrunkSize 0.5s linear forwards;
+}
+
+.halfCircle {
+    position: absolute;
+    width: var(--circle-diameter);
+    height: var(--circle-diameter);
+    clip: rect(0px, calc(1 / 2 * var(--circle-diameter)), var(--circle-diameter), 0px);
+    border-radius: calc(1 / 2 * var(--circle-diameter));
+}
+
+@keyframes an1 {
+    0% {
+        transform: rotate(90deg);
+    }
+    50% {
+        transform: rotate(45deg);
+    }
+    100% {
+        transform: rotate(90deg);
+    }
+}
+
+@keyframes an2 {
+    0% {
+        transform: rotate(-90deg);
+    }
+    50% {
+        transform: rotate(-45deg);
+    }
+    100% {
+        transform: rotate(-90deg);
+    }
+}
+
+@keyframes an1L {
+    0% {
+        transform: rotate(90deg);
+    }
+    50% {
+        transform: rotate(135deg);
+    }
+    100% {
+        transform: rotate(90deg);
+    }
+}
+
+@keyframes an2L {
+    0% {
+        transform: rotate(-90deg);
+    }
+    50% {
+        transform: rotate(-135deg);
+    }
+    100% {
+        transform: rotate(-90deg);
+    }
+}
+
