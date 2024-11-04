@@ -70,8 +70,10 @@ const Carousel = () => {
         setCurrentIndex(index + 1); // +1 因为我们有一个前置和后置的图片
     };
 
-    const getMouthClass = (curIndex: number, preIndex: number, leftMouth: string, rightMouth: string): string => (curIndex > preIndex && rightMouth || curIndex < preIndex && leftMouth) as string;
+    const getMouthAnClass = (index: number, curIndex: number, preIndex: number, leftMouth: string, rightMouth: string): string =>
+        ((curIndex === index + 1) && (curIndex > preIndex && rightMouth || curIndex < preIndex && leftMouth)) as string;
 
+    const getBgColor = (curIndex: number, index: number) => curIndex === index + 1 ? 'lightblue' : 'grey'
 
     return (
         <Box sx={{position: 'relative', width: '100%', overflow: 'hidden'}}>
@@ -143,16 +145,18 @@ const Carousel = () => {
                     }}
                     >
                         <Box
-                            className={`${(currentIndex === index + 1) && getMouthClass(currentIndex, preIndexRef.current, styles.topCircleAnL, styles.topCircleAnR)} ${styles.halfCircle}`}
-                            style={{
-                                transform: 'rotate(90deg)',
-                                backgroundColor: currentIndex === index + 1 ? 'lightblue' : 'grey',
+                            className={`${getMouthAnClass(index, currentIndex, preIndexRef.current, styles.topCircleAnL, styles.topCircleAnR)} 
+                            ${styles.halfCircle} 
+                            ${styles.halfCircleTop}`}
+                            sx={{
+                                backgroundColor: getBgColor(currentIndex, index),
                             }}></Box>
                         <Box
-                            className={`${(currentIndex === index + 1) && getMouthClass(currentIndex, preIndexRef.current, styles.bottomCircleAnL, styles.bottomCircleAnR)} ${styles.halfCircle}`}
-                            style={{
-                                transform: 'rotate(-90deg)',
-                                backgroundColor: currentIndex === index + 1 ? 'lightblue' : 'grey',
+                            className={`${getMouthAnClass(index, currentIndex, preIndexRef.current, styles.bottomCircleAnL, styles.bottomCircleAnR)}
+                            ${styles.halfCircle}
+                            ${styles.halfCircleBottom}`}
+                            sx={{
+                                backgroundColor: getBgColor(currentIndex, index),
                             }}></Box>
                     </Box>
                 ))}

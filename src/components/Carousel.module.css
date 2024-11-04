@@ -71,6 +71,15 @@
     border-radius: calc(1 / 2 * var(--circle-diameter));
 }
 
+.halfCircleTop {
+    transform: rotate(90deg);
+}
+
+.halfCircleBottom {
+    transform: rotate(-90deg);
+}
+
+
 @keyframes an1 {
     0% {
         transform: rotate(90deg);
