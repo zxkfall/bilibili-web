@@ -13,7 +13,6 @@ const Carousel = () => {
     const carouselId = 'carouselId'
 
     const [currentIndex, setCurrentIndex] = useState(1);
-    const [previousIndex, setPreviousIndex] = useState(1)
     const [showAn, setShowAn] = useState(true)
     const currentIndexRef = useRef(currentIndex);
     const [transitionEnded, setTransitionEnded] = useState(true)
@@ -70,10 +69,52 @@ const Carousel = () => {
         setCurrentIndex(index + 1); // +1 因为我们有一个前置和后置的图片
     };
 
-    const getMouthAnClass = (index: number, curIndex: number, preIndex: number, leftMouth: string, rightMouth: string): string =>
-        ((curIndex === index + 1) && (curIndex > preIndex && rightMouth || curIndex < preIndex && leftMouth)) as string;
+    const getMouthAnClass = (index: number, curIndex: number, preIndex: number, leftMouth: string, rightMouth: string): string => {
+        const rightEndToStartByManual = curIndex === images.length + 1 && preIndex === images.length && index === 0;
+        const leftStartToEndManual = curIndex === 0 && preIndex === 1 && index === images.length - 1;
+        const rightEndToStartAuto = curIndex === 1 && preIndex === images.length + 1 && index === 0;
+        const leftStartToEndAuto = curIndex === images.length && preIndex === 0 && index === images.length - 1;
 
-    const getBgColor = (curIndex: number, index: number) => curIndex === index + 1 ? 'lightblue' : 'grey'
+        if (rightEndToStartByManual) {
+            return rightMouth;
+        }
+        if (leftStartToEndManual) {
+            return leftMouth;
+
+        }
+        if (rightEndToStartAuto || leftStartToEndAuto) {
+            return '';
+        }
+
+        if (curIndex === index + 1) {
+            return (curIndex > preIndex && rightMouth || curIndex < preIndex && leftMouth) as string
+        }
+
+        return '';
+
+    }
+
+    const getBgColor = (curIndex: number, index: number) => {
+        const activeColor = 'lightblue';
+        const notSelectedColor = 'grey';
+
+        const rightEndToStartManual = curIndex === images.length + 1 && preIndexRef.current === images.length && index === 0;
+        const leftStartToEndManual = curIndex === 0 && preIndexRef.current === 1 && index === images.length - 1;
+        if (rightEndToStartManual || leftStartToEndManual) {
+            return activeColor;
+        }
+
+        return curIndex === index + 1 ? activeColor : notSelectedColor
+    }
+
+    const getShrunk = (curIndex: number, index: number): string => {
+        const rightEndToStartManual = curIndex === images.length + 1 && preIndexRef.current === images.length && index === 0;
+        const leftStartToEndManual = curIndex === 0 && preIndexRef.current === 1 && index === images.length - 1;
+        if (rightEndToStartManual || leftStartToEndManual) {
+            return styles.shrunkSizeAn;
+        }
+        return (curIndex === index + 1) ? styles.shrunkSizeAn : styles.clearAn
+    }
 
     return (
         <Box sx={{position: 'relative', width: '100%', overflow: 'hidden'}}>
@@ -134,7 +175,7 @@ const Carousel = () => {
                     <Box
                         key={index}
                         onClick={() => handleDotClick(index)}
-                        className={(currentIndex === index + 1) ? styles.shrunkSizeAn : styles.clearAn} sx={{
+                        className={getShrunk(currentIndex, index)} sx={{
                         width: 'var(--circle-diameter)',
                         height: 'var(--circle-diameter)',
                         borderRadius: '50%',
