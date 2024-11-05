@@ -12,7 +12,7 @@ const Author = ({authors}: { authors: { name: string; avatar: string }[] }) => (
             gap: 2,
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '16px',
+            padding: '4px',
         }}
     >
         <Box
@@ -24,7 +24,7 @@ const Author = ({authors}: { authors: { name: string; avatar: string }[] }) => (
                         key={index}
                         alt={author.name}
                         src={author.avatar}
-                        sx={{width: 24, height: 24}}
+                        sx={{width: 16, height: 16}}
                     />
                 ))}
             </AvatarGroup>

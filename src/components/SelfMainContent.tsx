@@ -14,12 +14,13 @@ import {styled} from '@mui/material/styles';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import {CardData} from "@/app/api/cards/route";
 import Author from "@/components/Author";
+import Carousel from "@/components/Carousel";
+import {images} from "next/dist/build/webpack/config/blocks/images";
 
 const SyledCard = styled(Card)(({theme}) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: 0,
-    height: '100%',
     backgroundColor: theme.palette.background.paper,
     '&:hover': {
         backgroundColor: 'transparent',
@@ -35,11 +36,11 @@ const SyledCard = styled(Card)(({theme}) => ({
 const SyledCardContent = styled(CardContent)({
     display: 'flex',
     flexDirection: 'column',
-    gap: 4,
-    padding: 16,
+    gap: 2,
+    padding: 4,
     flexGrow: 1,
     '&:last-child': {
-        paddingBottom: 16,
+        paddingBottom: 4,
     },
 });
 
@@ -94,72 +95,65 @@ const SelfMainContent = ({cardData}: SelfMainContentProps) => {
         setFocusedCardIndex(null);
     };
 
-    const getStyledCard = (index: number = 1, has: boolean = true, hasImg: boolean = true) => <SyledCard
+    const getStyledCard = (index: number = 1) => <SyledCard
         variant="outlined"
         onFocus={() => handleFocus(index)}
         onBlur={handleBlur}
         tabIndex={0}
         className={focusedCardIndex === index ? 'Mui-focused' : ''}
-        sx={has ? {} : {height: '100%'}}
     >
-        {hasImg && <CardMedia
+        <CardMedia
             component="img"
             alt="green iguana"
             image={cardData[index].img}
-            aspect-ratio={has ? "16 / 9" : ""}
-            sx={has ? {
-                borderBottom: '1px solid',
-                borderColor: 'divider',
-            } : {
+            aspect-ratio={"16 / 9"}
+            sx={{
                 height: {sm: 'auto', md: '50%'},
                 aspectRatio: {sm: '16 / 9', md: ''},
             }}
-        />}
+        />
+
         <SyledCardContent
-            sx={hasImg ? {} : {
+            sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                height: '100%',
+                height: '64px',
             }}
         >
-            <Typography gutterBottom variant="caption" component="div">
-                {cardData[index].tag}
-            </Typography>
-            <Typography gutterBottom variant="h6" component="div">
-                {cardData[index].title}
-            </Typography>
             <StyledTypography variant="body2" color="text.secondary" gutterBottom>
                 {cardData[index].description}
             </StyledTypography>
+            <Author authors={cardData[index].authors}/>
         </SyledCardContent>
-        <Author authors={cardData[index].authors}/>
     </SyledCard>;
 
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', gap: 4}}>
-            {cardData?.length > 0 && (
-                <Grid container spacing={2} columns={12}>
-                    <Grid size={{xs: 12, md: 6}}>
-                        {getStyledCard(0)}
-                    </Grid>
-                    <Grid size={{xs: 12, md: 6}}>
-                        {getStyledCard(1)}
-                    </Grid>
-                    <Grid size={{xs: 12, md: 4}}>
-                        {getStyledCard(2, false)}
-                    </Grid>
-                    <Grid size={{xs: 12, md: 4}}>
-                        <Box sx={{display: 'flex', flexDirection: 'column', gap: 2, height: '100%'}}>
-                            {getStyledCard(3, false, false)}
-                            {getStyledCard(4, false, false)}
-                        </Box>
-                    </Grid>
-                    <Grid size={{xs: 12, md: 4}}>
-                        {getStyledCard(5, false)}
-                    </Grid>
-                </Grid>
-            )}
+            <Box sx={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: 2,
+            }}>
+                <Box sx={{
+                    // minWidth: '512px',
+                    gridColumn: 'span 2',
+                    gridRow: 'span 2',
+                }}>
+                    <Carousel/>
+                </Box>
+                {cardData.map((card, index) => (
+                    <Box key={index}>
+                        {getStyledCard(index)}
+                    </Box>
+                ))}
+                {cardData.map((card, index) => (
+                    <Box key={index}>
+                        {getStyledCard(index)}
+                    </Box>
+                ))}
+            </Box>
+
         </Box>
     );
 };
