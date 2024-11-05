@@ -187,7 +187,7 @@ const Header = () => {
                     sx={{
                         borderBottom: '1px solid',
                         borderColor: 'divider',
-                        height: '256px',
+                        height: '192px',
                         objectFit: 'cover',
                     }}
                 />
