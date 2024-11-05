@@ -59,11 +59,13 @@ const Header = () => {
         if (headerElement) {
             if (window.scrollY > headerElement.clientHeight) {
                 headerElement.style.position = 'fixed';
-                headerElement.style.backgroundColor = 'transparent';
+                headerElement.style.backgroundColor = themeRef.current.palette.background.paper;
+                headerElement.style.borderBottom = `1px solid ${theme.palette.grey.A700}`;
                 headerElement.style.backdropFilter = 'blur(24px)';
             } else {
                 headerElement.style.position = 'absolute';
-                headerElement.style.backgroundColor = themeRef.current.palette.background.paper;
+                headerElement.style.backgroundColor = 'transparent';
+                headerElement.style.borderBottom = 'none';
                 headerElement.style.backdropFilter = 'none';
             }
         }
@@ -185,6 +187,8 @@ const Header = () => {
                     sx={{
                         borderBottom: '1px solid',
                         borderColor: 'divider',
+                        height: '256px',
+                        objectFit: 'cover',
                     }}
                 />
             </Box>
