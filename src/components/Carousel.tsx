@@ -21,6 +21,7 @@ const Carousel = () => {
         'https://fastly.picsum.photos/id/915/800/450.jpg?hmac=8dNg_adxomxUf9xy_JiTRKoQR3jT8Az9iFe5sEYR4sc',
     ];
 
+    const newImages = images.length ? [images.at(-1), ...images, images[0]] : [];
     const carouselId = 'carouselId'
 
     const [currentIndex, setCurrentIndex] = useState(1);
@@ -31,7 +32,7 @@ const Carousel = () => {
 
     useEffect(() => {
         currentIndexRef.current = currentIndex;
-        getBottomColor(images[currentIndex - 1]).then((color) => {
+        getBottomColor().then((color) => {
             const cd = document.getElementById('carouselDescription')!;
             cd.style.backgroundColor = color;
         })
@@ -131,14 +132,21 @@ const Carousel = () => {
         return (curIndex === index + 1) ? styles.shrunkSizeAn : styles.clearAn
     }
 
-    function getBottomColor(imageUrl: string): Promise<string> {
+    function getBottomColor(): Promise<string> {
         return new Promise((resolve, reject) => {
             // 创建一个 Image 对象
-            const imgH = document.querySelector(`img[alt="Slide ${currentIndex - 1}"]`)!;
-            console.log(imgH);
+            let curNumber = currentIndex;
+            if (currentIndex === images.length + 1 && preIndexRef.current === images.length) {
+                curNumber = 1
+            }
+            if (currentIndex === 0 && preIndexRef.current === 1) {
+                curNumber = images.length
+            }
+            const carouselSlideImg = document.querySelector(`img[alt="Slide ${curNumber}"]`);
+            if (!carouselSlideImg) return;
             const img = new Image();
 
-            img.src = imgH.getAttribute('src') as string;
+            img.src = carouselSlideImg.getAttribute('src') as string;
             img.crossOrigin = 'anonymous'; // 允许跨域请求
 
             img.onload = () => {
@@ -210,13 +218,7 @@ const Carousel = () => {
                     }}
 
                 >
-                    <Box
-                        component="img"
-                        src={images[images.length - 1]}
-                        alt={`Slide -1`}
-                        sx={{width: '100%', height: 'auto', flexShrink: 0}}
-                    />
-                    {images.map((image, index) => (
+                    {newImages.map((image, index) => (
                         <Box
                             component="img"
                             key={index}
@@ -225,12 +227,6 @@ const Carousel = () => {
                             sx={{width: '100%', height: 'auto', flexShrink: 0}}
                         />
                     ))}
-                    <Box
-                        component="img"
-                        src={images[0]}
-                        alt={`Slide 3`}
-                        sx={{width: '100%', height: 'auto', flexShrink: 0}}
-                    />
                 </Box>
 
             </Box>
