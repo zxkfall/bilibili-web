@@ -1,0 +1,19 @@
+.mainContentLayout {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+@media screen and (min-width: 900px) {
+    .mainContentLayout {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media screen and (min-width: 1536px) {
+    .mainContentLayout {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+

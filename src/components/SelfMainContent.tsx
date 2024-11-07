@@ -15,6 +15,7 @@ import {CardData} from "@/app/api/cards/route";
 import Author from "@/components/Author";
 import Carousel from "@/components/Carousel";
 import {CarouselData} from "@/app/api/carousel/route";
+import styles from './SelfMainContent.module.css';
 
 const SyledCard = styled(Card)(({theme}) => ({
     display: 'flex',
@@ -130,11 +131,7 @@ const SelfMainContent = ({cardData, carouselData}: SelfMainContentProps) => {
 
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', gap: 4}}>
-            <Box sx={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: 2,
-            }}>
+            <Box className={styles.mainContentLayout}>
                 <Box sx={{
                     // minWidth: '512px',
                     gridColumn: 'span 2',

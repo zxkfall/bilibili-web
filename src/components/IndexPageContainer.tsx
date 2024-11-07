@@ -24,7 +24,7 @@ export default function IndexPageContainer({cardData, latestData, carouselData}:
             <Box sx={{flex: '1 1', overflow: 'visible'}}>
                 <CssBaseline enableColorScheme/>
                 <Container
-                    maxWidth="lg"
+                    maxWidth="xl"
                     component="main"
                     sx={{display: 'flex', flexDirection: 'column', mb: 16, mt: 3, gap: 4}}
                 >
