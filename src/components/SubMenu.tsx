@@ -10,19 +10,21 @@ import {
     Whatshot
 } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
-import {Button, Typography} from "@mui/material";
+import {Button, Container, Typography} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import * as React from "react";
 
 const SubMenu = () => {
-    return (<Box sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 3,
-        pt: 2,
-        px: 3,
-    }}>
+    return (<Container
+        maxWidth="xl"
+        sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 3,
+            pt: 2,
+            px: 3,
+        }}>
         <Box sx={{
             display: 'flex',
             flexDirection: 'row',
@@ -89,7 +91,7 @@ const SubMenu = () => {
                     >{item.value}</Button>
                 )}
         </Box>
-    </Box>);
+    </Container>);
 }
 
 export default SubMenu;
