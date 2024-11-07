@@ -9,12 +9,12 @@ import Footer from "@/components/Footer";
 import {CardData} from "@/app/api/cards/route";
 import {ArticleInfo} from "@/app/api/articles/latested/route";
 import SubMenu from "@/components/SubMenu";
-import Carousel from "@/components/Carousel";
-import Grid from "@mui/material/Grid2";
+import {CarouselData} from "@/app/api/carousel/route";
 
-export default function IndexPageContainer({cardData, latestData}: {
+export default function IndexPageContainer({cardData, latestData, carouselData}: {
     cardData: CardData[];
     latestData: ArticleInfo[];
+    carouselData: CarouselData[];
 }) {
 
     return (
@@ -28,7 +28,7 @@ export default function IndexPageContainer({cardData, latestData}: {
                     component="main"
                     sx={{display: 'flex', flexDirection: 'column', mb: 16, mt: 3, gap: 4}}
                 >
-                    <SelfMainContent cardData={cardData}/>
+                    <SelfMainContent cardData={cardData} carouselData={carouselData}/>
                     <Latest articleInfo={latestData}/>
                 </Container>
             </Box>

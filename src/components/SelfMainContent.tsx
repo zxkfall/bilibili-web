@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Grid from '@mui/material/Grid2';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
@@ -15,7 +14,7 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import {CardData} from "@/app/api/cards/route";
 import Author from "@/components/Author";
 import Carousel from "@/components/Carousel";
-import {images} from "next/dist/build/webpack/config/blocks/images";
+import {CarouselData} from "@/app/api/carousel/route";
 
 const SyledCard = styled(Card)(({theme}) => ({
     display: 'flex',
@@ -80,9 +79,10 @@ export const Search = () => (
 
 interface SelfMainContentProps {
     cardData: CardData[];
+    carouselData: CarouselData[];
 }
 
-const SelfMainContent = ({cardData}: SelfMainContentProps) => {
+const SelfMainContent = ({cardData, carouselData}: SelfMainContentProps) => {
     const [focusedCardIndex, setFocusedCardIndex] = useState<number | null>(
         null,
     );
@@ -140,7 +140,7 @@ const SelfMainContent = ({cardData}: SelfMainContentProps) => {
                     gridColumn: 'span 2',
                     gridRow: 'span 2',
                 }}>
-                    <Carousel/>
+                    <Carousel images={carouselData}/>
                 </Box>
                 {cardData.map((card, index) => (
                     <Box key={index}>

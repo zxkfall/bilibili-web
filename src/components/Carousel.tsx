@@ -1,28 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Box, IconButton, Typography} from '@mui/material';
-import {
-    ArrowForward,
-    ArrowBack,
-    ArrowBackRounded,
-    ArrowBackSharp,
-    ArrowCircleLeft,
-    ArrowBackIos, ArrowForwardIos
-} from '@mui/icons-material';
+import {ArrowBackIos, ArrowForwardIos} from '@mui/icons-material';
 import styles from './Carousel.module.css'
+import {CarouselData} from "@/app/api/carousel/route";
 
-const Carousel = () => {
-    const images = [
-        // 'https://picsum.photos/800/450?random=1',
-        // 'https://picsum.photos/800/450?random=2',
-        // 'https://picsum.photos/800/450?random=3',
-        'https://fastly.picsum.photos/id/512/800/450.jpg?hmac=fMPLkleOOsR5iFIi902WSHePre8kI9jjAZREEBD6kOc',
-        'https://fastly.picsum.photos/id/287/800/450.jpg?hmac=0azfBbMgGIqhetRKzS5NNWM_zEhR2P_8OeKXJWiYqhs',
-        'https://fastly.picsum.photos/id/877/800/450.jpg?hmac=tBVsMzsA_sCAJI8QAeyL4yPH_TuDJA-Nn-29aLQJ1KA',
-        'https://fastly.picsum.photos/id/915/800/450.jpg?hmac=8dNg_adxomxUf9xy_JiTRKoQR3jT8Az9iFe5sEYR4sc',
-    ];
-
+const Carousel = ({images}: { images: CarouselData[] }) => {
     const newImages = images.length ? [images.at(-1), ...images, images[0]] : [];
     const carouselId = 'carouselId'
+    const carouselDesBgId = 'carouselBackgroundDescriptionId';
 
     const [currentIndex, setCurrentIndex] = useState(1);
     const [showAn, setShowAn] = useState(true)
@@ -33,8 +18,9 @@ const Carousel = () => {
     useEffect(() => {
         currentIndexRef.current = currentIndex;
         getBottomColor().then((color) => {
-            const cd = document.getElementById('carouselDescription')!;
-            cd.style.backgroundColor = color;
+            const cd = document.getElementById(carouselDesBgId)!;
+            cd.style.backgroundColor = color.rgb;
+            cd.style.boxShadow = `0 -12px 12px ${color.rgb},0 -24px 24px ${color.rgb}, 0 -32px 32px ${color.rgb}`;
         })
     }, [currentIndex]);
 
@@ -62,7 +48,6 @@ const Carousel = () => {
             sliderContainer.removeEventListener('transitionend', transitionEndListener)
         }
     }, []);
-
 
     const handleNext = () => {
         if (transitionEnded) {
@@ -132,58 +117,60 @@ const Carousel = () => {
         return (curIndex === index + 1) ? styles.shrunkSizeAn : styles.clearAn
     }
 
-    function getBottomColor(): Promise<string> {
-        return new Promise((resolve, reject) => {
-            // 创建一个 Image 对象
-            let curNumber = currentIndex;
-            if (currentIndex === images.length + 1 && preIndexRef.current === images.length) {
-                curNumber = 1
+    const getBottomColor = (): Promise<{
+        r: number,
+        g: number,
+        b: number,
+        rgb: string
+    }> => new Promise((resolve, reject) => {
+        // 创建一个 Image 对象
+        let curNumber = currentIndex;
+        if (currentIndex === images.length + 1 && preIndexRef.current === images.length) {
+            curNumber = 1
+        }
+        if (currentIndex === 0 && preIndexRef.current === 1) {
+            curNumber = images.length
+        }
+        const carouselSlideImg = document.querySelector(`img[alt="Slide ${curNumber}"]`);
+        if (!carouselSlideImg) return;
+        const img = new Image();
+
+        img.src = carouselSlideImg.getAttribute('src') as string;
+        img.crossOrigin = 'anonymous'; // 允许跨域请求
+
+        img.onload = () => {
+            // 创建一个 Canvas 元素来处理图片
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+                reject('Canvas context not found');
+                return;
             }
-            if (currentIndex === 0 && preIndexRef.current === 1) {
-                curNumber = images.length
-            }
-            const carouselSlideImg = document.querySelector(`img[alt="Slide ${curNumber}"]`);
-            if (!carouselSlideImg) return;
-            const img = new Image();
 
-            img.src = carouselSlideImg.getAttribute('src') as string;
-            img.crossOrigin = 'anonymous'; // 允许跨域请求
+            // 设置 Canvas 尺寸为图片的尺寸
+            canvas.width = img.width;
+            canvas.height = img.height;
 
-            img.onload = () => {
-                // 创建一个 Canvas 元素来处理图片
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                if (!ctx) {
-                    reject('Canvas context not found');
-                    return;
-                }
+            // 将图片绘制到 Canvas 上
+            ctx.drawImage(img, 0, 0, img.width, img.height);
 
-                // 设置 Canvas 尺寸为图片的尺寸
-                canvas.width = img.width;
-                canvas.height = img.height;
+            // 获取底部区域的像素数据（可以根据需要调整底部区域的高度）
+            const bottomHeight = 100; // 取图片底部 100 像素
+            const imageData = ctx.getImageData(0, img.height - bottomHeight, img.width, bottomHeight);
 
-                // 将图片绘制到 Canvas 上
-                ctx.drawImage(img, 0, 0, img.width, img.height);
+            // 获取像素数据
+            const pixels = imageData.data;
+            const color = getDominantColor(pixels);
 
-                // 获取底部区域的像素数据（可以根据需要调整底部区域的高度）
-                const bottomHeight = 100; // 取图片底部 100 像素
-                const imageData = ctx.getImageData(0, img.height - bottomHeight, img.width, bottomHeight);
+            resolve(color);
+        };
 
-                // 获取像素数据
-                const pixels = imageData.data;
-                const color = getDominantColor(pixels);
+        img.onerror = (error) => {
+            reject(error);
+        };
+    });
 
-                resolve(color);
-            };
-
-            img.onerror = (error) => {
-                reject(error);
-            };
-        });
-    }
-
-// 计算主色调
-    function getDominantColor(pixels: Uint8ClampedArray): string {
+    const getDominantColor = (pixels: Uint8ClampedArray): { r: number, g: number, b: number, rgb: string } => {
         let r = 0, g = 0, b = 0;
         const length = pixels.length / 4;
 
@@ -200,13 +187,15 @@ const Carousel = () => {
         b = Math.floor(b / length);
 
         // 返回 RGB 字符串
-        return `rgb(${r}, ${g}, ${b})`;
-    }
+        return {r, g, b, rgb: `rgb(${r}, ${g}, ${b})`};
+    };
 
     return (
         <Box sx={{
             display: 'flex',
             flexDirection: 'column',
+            overflow: 'hidden',
+            borderRadius: 1,
         }}>
             <Box sx={{position: 'relative', width: '100%', overflow: 'hidden'}}>
                 <Box
@@ -222,7 +211,7 @@ const Carousel = () => {
                         <Box
                             component="img"
                             key={index}
-                            src={image}
+                            src={image?.url}
                             alt={`Slide ${index}`}
                             sx={{width: '100%', height: 'auto', flexShrink: 0}}
                         />
@@ -231,96 +220,113 @@ const Carousel = () => {
 
             </Box>
             <Box
-                id={'carouselDescription'}
                 sx={{
+                    position: 'relative',
+                    zIndex: '1',
+                    overflowX: 'clip',
+                }}
+            >
+                <Box
+                    id={carouselDesBgId}
+                    sx={{
+                        position: 'absolute',
+                        zIndex: -100,
+                        width: '100%',
+                        height: '100%',
+                    }}/>
+                <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'flex-start',
                     pt: 1.5,
                     px: 1,
+                    backgroundColor: 'transparent',
                 }}>
-                <Box sx={{
-                    display: 'flex',
-                    width: '100%',
-                    justifyContent: 'space-between',
-                    gap: 2,
-                }}>
-                    <Typography sx={{
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                        textOverflow: 'ellipsis',
-                    }}
-                                variant={'subtitle1'}
-                    >
-                        oweprfgewpf hweigrfvewrdfhnvuewirf sacsdeafeasfvwr
-                    </Typography>
                     <Box sx={{
                         display: 'flex',
-                        flexDirection: 'row',
-                        gap: 1,
-
+                        width: '100%',
+                        justifyContent: 'space-between',
+                        gap: 2,
                     }}>
-                        <IconButton
-                            size={"small"}
-                            onClick={handlePrev}
-                            sx={{height: '24px', width: '24px'}}
+                        <Typography sx={{
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
+                        }}
+                                    variant={'subtitle1'}
                         >
-                            <ArrowBackIos fontSize={"small"}/>
-                        </IconButton>
-                        <IconButton
-                            size={"small"}
-                            onClick={handleNext}
-                            sx={{height: '24px', width: '24px'}}
-                        >
-                            <ArrowForwardIos fontSize={"small"}/>
-                        </IconButton>
+                            {newImages[currentIndex]?.description}
+                        </Typography>
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: 1,
+
+                        }}>
+                            <IconButton
+                                size={"small"}
+                                onClick={handlePrev}
+                                sx={{height: '24px', width: '24px'}}
+                            >
+                                <ArrowBackIos fontSize={"small"} sx={{
+                                    ml: 0.5
+                                }}/>
+                            </IconButton>
+                            <IconButton
+                                size={"small"}
+                                onClick={handleNext}
+                                sx={{height: '24px', width: '24px'}}
+                            >
+                                <ArrowForwardIos fontSize={"small"}/>
+                            </IconButton>
+                        </Box>
+
                     </Box>
 
-                </Box>
-
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        mt: 1,
-                    }}
-                >
-                    {images.map((_, index) => (
-                        <Box
-                            key={index}
-                            onClick={() => handleDotClick(index)}
-                            className={getShrunk(currentIndex, index)} sx={{
-                            width: 'var(--circle-diameter)',
-                            height: 'var(--circle-diameter)',
-                            borderRadius: '50%',
-                            backgroundColor: 'transparent',
-                            mr: 1,
-                            mb: 2,
-                            pl: 0.2,
-                            cursor: 'pointer',
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            mt: 1,
                         }}
-                        >
+                    >
+                        {images.map((_, index) => (
                             <Box
-                                className={`${getMouthAnClass(index, currentIndex, preIndexRef.current, styles.topCircleAnL, styles.topCircleAnR)} 
+                                key={index}
+                                onClick={() => handleDotClick(index)}
+                                className={getShrunk(currentIndex, index)} sx={{
+                                width: 'var(--circle-diameter)',
+                                height: 'var(--circle-diameter)',
+                                borderRadius: '50%',
+                                backgroundColor: 'transparent',
+                                mr: 1,
+                                mb: 2,
+                                pl: 0.2,
+                                cursor: 'pointer',
+                            }}
+                            >
+                                <Box
+                                    className={`${getMouthAnClass(index, currentIndex, preIndexRef.current, styles.topCircleAnL, styles.topCircleAnR)} 
                             ${styles.halfCircle} 
                             ${styles.halfCircleTop}`}
-                                sx={{
-                                    backgroundColor: getBgColor(currentIndex, index),
-                                }}></Box>
-                            <Box
-                                className={`${getMouthAnClass(index, currentIndex, preIndexRef.current, styles.bottomCircleAnL, styles.bottomCircleAnR)}
+                                    sx={{
+                                        backgroundColor: getBgColor(currentIndex, index),
+                                    }}></Box>
+                                <Box
+                                    className={`${getMouthAnClass(index, currentIndex, preIndexRef.current, styles.bottomCircleAnL, styles.bottomCircleAnR)}
                             ${styles.halfCircle}
                             ${styles.halfCircleBottom}`}
-                                sx={{
-                                    backgroundColor: getBgColor(currentIndex, index),
-                                }}></Box>
-                        </Box>
-                    ))}
+                                    sx={{
+                                        backgroundColor: getBgColor(currentIndex, index),
+                                    }}></Box>
+                            </Box>
+                        ))}
 
+                    </Box>
                 </Box>
+
             </Box>
         </Box>
-
     );
 };
 
