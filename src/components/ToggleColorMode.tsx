@@ -16,6 +16,7 @@ export default function ToggleColorMode({
 }: ToggleColorModeProps) {
   return (
     <IconButton
+        id="theme-light-night-button"
       onClick={toggleColorMode}
       color="primary"
       size="small"
