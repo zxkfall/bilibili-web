@@ -21,7 +21,7 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
     const [transitionEnded, setTransitionEnded] = useState(true);
     const transitionEndedRef = useRef(transitionEnded);
     const preIndexRef = useRef(1);
-    const intervalRef = useRef<NodeJS.Timeout | null>(null)
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
     const router = useRouter();
 
@@ -35,7 +35,7 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
     }, [currentIndex]);
 
     useEffect(() => {
-        console.log(currentIndex, preIndexRef.current)
+        console.log(currentIndex, preIndexRef.current, new Date())
         preIndexRef.current = currentIndex;
     });
 
@@ -62,17 +62,38 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
         }
     }, []);
 
+
     useEffect(() => {
         if (enableTimer) {
-            intervalRef.current = setInterval(handleNext, timerInterval);
+            startTimer();
             return () => {
-                if (intervalRef.current) {
-                    clearInterval(intervalRef.current);
-                    intervalRef.current = null;
+                if (timeoutRef.current) {
+                    clearTimeout(timeoutRef.current); // 清理定时器
+                    timeoutRef.current = null;
                 }
-            }
+            };
         }
     }, [enableTimer, timerInterval]);
+
+    const startTimer = () => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
+        const triggerNext = () => {
+            handleNext();
+            if (enableTimer) {
+                timeoutRef.current = setTimeout(triggerNext, timerInterval);
+            }
+        };
+
+        timeoutRef.current = setTimeout(triggerNext, timerInterval);
+    };
+
+    const handleNextWithResetTimer = () => {
+        startTimer();
+        handleNext();
+    };
 
     const handleNext = () => {
         if (transitionEndedRef.current) {
@@ -85,8 +106,14 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
         }
     };
 
+    const handlePreWithResetTimer = () => {
+        startTimer();
+        handlePrev();
+    };
+
     const handlePrev = () => {
         if (transitionEnded) {
+            startTimer();
             setTransitionEnded(() => false)
             setShowAn(true)
             setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length + 2) % (images.length + 2));
@@ -314,7 +341,7 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
                         }}>
                             <IconButton
                                 size={"small"}
-                                onClick={handlePrev}
+                                onClick={handlePreWithResetTimer}
                                 sx={{height: '24px', width: '24px'}}
                             >
                                 <ArrowBackIos fontSize={"small"} sx={{
@@ -323,7 +350,7 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
                             </IconButton>
                             <IconButton
                                 size={"small"}
-                                onClick={handleNext}
+                                onClick={handleNextWithResetTimer}
                                 sx={{height: '24px', width: '24px'}}
                             >
                                 <ArrowForwardIos fontSize={"small"}/>
