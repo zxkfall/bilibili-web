@@ -121,6 +121,7 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
     };
 
     const handleDotClick = (index: number) => {
+        startTimer();
         setShowAn(true)
         setCurrentIndex(index + 1); // +1 因为我们有一个前置和后置的图片
     };
