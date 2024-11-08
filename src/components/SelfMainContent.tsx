@@ -137,7 +137,12 @@ const SelfMainContent = ({cardData, carouselData}: SelfMainContentProps) => {
                     gridColumn: 'span 2',
                     gridRow: 'span 2',
                 }}>
-                    <Carousel images={carouselData}/>
+                    <Carousel images={carouselData} onCarouselClick={(curIndex, curImage) => {
+                        //index will be
+                        // 0 1 2 3 4 5
+                        // 4 1 2 3 4 1
+                        window.open(curImage.imageUrl)
+                    }}/>
                 </Box>
                 {cardData.map((card, index) => (
                     <Box key={index}>

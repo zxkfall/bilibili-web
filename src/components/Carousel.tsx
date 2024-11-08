@@ -1,11 +1,15 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Box, IconButton, Typography} from '@mui/material';
+import {Box, IconButton, Link, Typography} from '@mui/material';
 import {ArrowBackIos, ArrowForwardIos} from '@mui/icons-material';
 import styles from './Carousel.module.css'
 import {CarouselData} from "@/app/api/carousel/route";
+import {useRouter} from "next/navigation";
 
-const Carousel = ({images}: { images: CarouselData[] }) => {
-    const newImages = images.length ? [images.at(-1), ...images, images[0]] : [];
+const Carousel = ({images, onCarouselClick}: {
+    images: CarouselData[],
+    onCarouselClick: (curIndex: number, curImage: CarouselData) => void
+}) => {
+    const newImages = images.length ? [images.at(-1), ...images, images[0]] as CarouselData[] : [];
     const carouselId = 'carouselId'
     const carouselDesBgId = 'carouselBackgroundDescriptionId';
 
@@ -14,6 +18,8 @@ const Carousel = ({images}: { images: CarouselData[] }) => {
     const currentIndexRef = useRef(currentIndex);
     const [transitionEnded, setTransitionEnded] = useState(true)
     const preIndexRef = useRef(1)
+
+    const router = useRouter()
 
     useEffect(() => {
         currentIndexRef.current = currentIndex;
@@ -197,7 +203,7 @@ const Carousel = ({images}: { images: CarouselData[] }) => {
             overflow: 'hidden',
             borderRadius: 1,
         }}>
-            <Box sx={{position: 'relative', width: '100%', overflow: 'hidden'}}>
+            <Box sx={{position: 'relative', width: '100%', overflow: 'hidden', cursor: 'pointer'}}>
                 <Box
                     id={carouselId}
                     sx={{
@@ -205,13 +211,18 @@ const Carousel = ({images}: { images: CarouselData[] }) => {
                         transition: showAn ? 'transform 0.5s ease' : '',
                         transform: `translateX(-${(currentIndex) * 100}%)`,
                     }}
-
-                >
+                    onClick={() => {
+                        if (onCarouselClick) {
+                            onCarouselClick(currentIndex, newImages[currentIndex]);
+                        } else if (newImages[currentIndex]) {
+                            router.push(newImages[currentIndex].url);
+                        }
+                    }}>
                     {newImages.map((image, index) => (
                         <Box
                             component="img"
                             key={index}
-                            src={image?.url}
+                            src={image?.imageUrl}
                             alt={`Slide ${index}`}
                             sx={{width: '100%', height: 'auto', flexShrink: 0}}
                         />
@@ -255,7 +266,23 @@ const Carousel = ({images}: { images: CarouselData[] }) => {
                         }}
                                     variant={'subtitle1'}
                         >
-                            {newImages[currentIndex]?.description}
+                            <Link underline='none' sx={{
+                                backgroundColor: 'transparent',
+                                '&:before': {
+                                    backgroundColor: 'transparent'
+                                },
+                                cursor: 'pointer',
+                            }}
+                                  onClick={() => {
+                                      if (onCarouselClick) {
+                                          onCarouselClick(currentIndex, newImages[currentIndex]);
+                                      } else if (newImages[currentIndex]) {
+                                          router.push(newImages[currentIndex].url);
+                                      }
+                                  }}
+                            >
+                                {newImages[currentIndex]?.description}
+                            </Link>
                         </Typography>
                         <Box sx={{
                             display: 'flex',
