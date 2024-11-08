@@ -5,21 +5,25 @@ import styles from './Carousel.module.css'
 import {CarouselData} from "@/app/api/carousel/route";
 import {useRouter} from "next/navigation";
 
-const Carousel = ({images, onCarouselClick}: {
+const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 4000}: {
     images: CarouselData[],
-    onCarouselClick: (curIndex: number, curImage: CarouselData) => void
+    onCarouselClick: (curIndex: number, curImage: CarouselData) => void,
+    enableTimer?: boolean,
+    timerInterval?: number,
 }) => {
     const newImages = images.length ? [images.at(-1), ...images, images[0]] as CarouselData[] : [];
-    const carouselId = 'carouselId'
+    const carouselId = 'carouselId';
     const carouselDesBgId = 'carouselBackgroundDescriptionId';
 
     const [currentIndex, setCurrentIndex] = useState(1);
-    const [showAn, setShowAn] = useState(true)
+    const [showAn, setShowAn] = useState(true);
     const currentIndexRef = useRef(currentIndex);
-    const [transitionEnded, setTransitionEnded] = useState(true)
-    const preIndexRef = useRef(1)
+    const [transitionEnded, setTransitionEnded] = useState(true);
+    const transitionEndedRef = useRef(transitionEnded);
+    const preIndexRef = useRef(1);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
-    const router = useRouter()
+    const router = useRouter();
 
     useEffect(() => {
         currentIndexRef.current = currentIndex;
@@ -40,24 +44,42 @@ const Carousel = ({images, onCarouselClick}: {
         const transitionEndListener = () => {
             const curIndex = currentIndexRef.current;
             if (curIndex === images.length + 1) {
-                setShowAn(() => false)
-                setCurrentIndex(1)
+                setShowAn(() => false);
+                setCurrentIndex(1);
             }
             if (curIndex === 0) {
-                setShowAn(() => false)
-                setCurrentIndex(images.length)
+                setShowAn(() => false);
+                setCurrentIndex(images.length);
             }
-            setTransitionEnded(() => true)
+            setTransitionEnded(() => {
+                transitionEndedRef.current = true;
+                return true;
+            })
         };
-        sliderContainer.addEventListener('transitionend', transitionEndListener)
+        sliderContainer.addEventListener('transitionend', transitionEndListener);
         return () => {
-            sliderContainer.removeEventListener('transitionend', transitionEndListener)
+            sliderContainer.removeEventListener('transitionend', transitionEndListener);
         }
     }, []);
 
+    useEffect(() => {
+        if (enableTimer) {
+            intervalRef.current = setInterval(handleNext, timerInterval);
+            return () => {
+                if (intervalRef.current) {
+                    clearInterval(intervalRef.current);
+                    intervalRef.current = null;
+                }
+            }
+        }
+    }, [enableTimer, timerInterval]);
+
     const handleNext = () => {
-        if (transitionEnded) {
-            setTransitionEnded(() => false)
+        if (transitionEndedRef.current) {
+            setTransitionEnded(() => {
+                transitionEndedRef.current = false;
+                return false;
+            })
             setShowAn(true)
             setCurrentIndex((prevIndex) => (prevIndex + 1) % (images.length + 2));
         }
