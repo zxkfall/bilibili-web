@@ -5,11 +5,12 @@ import styles from './Carousel.module.css'
 import {CarouselData} from "@/app/api/carousel/route";
 import {useRouter} from "next/navigation";
 
-const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 4000}: {
+const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 4000, waitAllImagesLoaded = true}: {
     images: CarouselData[],
     onCarouselClick: (curIndex: number, curImage: CarouselData) => void,
     enableTimer?: boolean,
     timerInterval?: number,
+    waitAllImagesLoaded?: boolean,
 }) => {
     const newImages = images.length ? [images.at(-1), ...images, images[0]] as CarouselData[] : [];
     const carouselId = 'carouselId';
@@ -22,6 +23,7 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
     const transitionEndedRef = useRef(transitionEnded);
     const preIndexRef = useRef(1);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+    const [isImagesLoaded, setIsImagesLoaded] = useState(!waitAllImagesLoaded);
 
     const router = useRouter();
 
@@ -38,6 +40,24 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
         console.log(currentIndex, preIndexRef.current, new Date())
         preIndexRef.current = currentIndex;
     });
+
+    useEffect(() => {
+        const promises = images.map((src) => {
+            return new Promise<boolean>((resolve, reject) => {
+                const img = new Image();
+                img.src = src.imageUrl;
+                if (img.complete) {
+                    resolve(true);
+                } else {
+                    img.onload = () => resolve(true);
+                    img.onerror = () => reject(false);
+                }
+            });
+        });
+
+        Promise.all(promises)
+            .then(() => setIsImagesLoaded(true));
+    }, []);
 
     useEffect(() => {
         const sliderContainer = document.getElementById(carouselId)!
@@ -73,9 +93,12 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
                 }
             };
         }
-    }, [enableTimer, timerInterval]);
+    }, [enableTimer, timerInterval, isImagesLoaded]);
 
     const startTimer = () => {
+        if (!isImagesLoaded) {
+            return;
+        }
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
