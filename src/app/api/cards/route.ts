@@ -84,9 +84,15 @@ const GET = (req: Request) => {
             authors: [{name: 'Travis Howard', avatar: '/static/images/avatar/2.jpg'}],
         },
     ];
+
+    let allData: CardData[] = [];
+    for (let i = 0; i < 10; i++) {
+        allData = allData.concat(cardData);
+    }
+
     return new Response(
         JSON.stringify({
-            data: cardData,
+            data: allData,
         }),
         {
             headers: {

@@ -84,13 +84,13 @@ interface SelfMainContentProps {
 }
 
 const SelfMainContent = ({cardData, carouselData}: SelfMainContentProps) => {
-    const [focusedCardIndex, setFocusedCardIndex] = useState<number | null>(
-        null,
-    );
+    const batchSize = 10;
+
+    const [focusedCardIndex, setFocusedCardIndex] = useState<number | null>(null);
 
     const mainContainerRef = useRef<HTMLDivElement>();
 
-    const [cusCardData, setCusCardData] = useState(cardData);
+    const [cusCardData, setCusCardData] = useState(cardData.slice(0, batchSize));
 
     const cusCardDataRef = useRef(cusCardData);
 
@@ -101,9 +101,12 @@ const SelfMainContent = ({cardData, carouselData}: SelfMainContentProps) => {
     useEffect(() => {
         const infiniteLoadImage = () => {
             const mainContainer = mainContainerRef.current!;
-            // console.log(window.scrollY, mainContainer?.clientHeight, cusCardDataRef.current.length)
-            if ((window.scrollY + 256 > mainContainer?.clientHeight || window.innerHeight > mainContainer.clientHeight - window.scrollY + 256) && cusCardDataRef.current.length < 100 - 4) {
-                setCusCardData((prevState) => prevState.concat(cardData))
+            const scrollOverHeight = window.scrollY + 256 > mainContainer?.clientHeight;
+            const resizeOverHeight = window.innerHeight > mainContainer.clientHeight - window.scrollY + 256;
+            const lessMaxCount = cusCardDataRef.current.length < cardData.length;
+            const preBatchImagesLoaded = true; //TODO
+            if ((scrollOverHeight || resizeOverHeight) && lessMaxCount && preBatchImagesLoaded) {
+                setCusCardData((prevState) => prevState.concat(cardData.slice(prevState.length, prevState.length + batchSize)));
             }
         };
         window.addEventListener('scroll', infiniteLoadImage);
@@ -174,11 +177,6 @@ const SelfMainContent = ({cardData, carouselData}: SelfMainContentProps) => {
                     {getStyledCard(index)}
                 </Box>
             ))}
-            {/*{cusCardData.map((card, index) => (*/}
-            {/*    <Box key={index}>*/}
-            {/*        {getStyledCard(index)}*/}
-            {/*    </Box>*/}
-            {/*))}*/}
         </Box>
 
     );
