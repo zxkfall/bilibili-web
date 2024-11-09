@@ -67,6 +67,22 @@ const GET = (req: Request) => {
                 'Our recent product updates are designed to help you maximize efficiency and achieve more. Get a detailed overview of the new features and improvements that can elevate your workflow.',
             authors: [{name: 'Travis Howard', avatar: '/static/images/avatar/2.jpg'}],
         },
+        {
+            img: 'https://picsum.photos/800/450?random=7',
+            tag: 'Product',
+            title: 'Maximizing efficiency with our latest product updates',
+            description:
+                'Our recent product updates are designed to help you maximize efficiency and achieve more. Get a detailed overview of the new features and improvements that can elevate your workflow.',
+            authors: [{name: 'Travis Howard', avatar: '/static/images/avatar/2.jpg'}],
+        },
+        {
+            img: 'https://picsum.photos/800/450?random=8',
+            tag: 'Product',
+            title: 'Maximizing efficiency with our latest product updates',
+            description:
+                'Our recent product updates are designed to help you maximize efficiency and achieve more. Get a detailed overview of the new features and improvements that can elevate your workflow.',
+            authors: [{name: 'Travis Howard', avatar: '/static/images/avatar/2.jpg'}],
+        },
     ];
     return new Response(
         JSON.stringify({

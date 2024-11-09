@@ -29,7 +29,7 @@ export default function IndexPageContainer({cardData, latestData, carouselData}:
                     sx={{display: 'flex', flexDirection: 'column', mb: 16, mt: 3, gap: 4}}
                 >
                     <SelfMainContent cardData={cardData} carouselData={carouselData}/>
-                    <Latest articleInfo={latestData}/>
+                    {/*<Latest articleInfo={latestData}/>*/}
                 </Container>
             </Box>
             <Footer/>

@@ -37,7 +37,7 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
     }, [currentIndex]);
 
     useEffect(() => {
-        console.log(currentIndex, preIndexRef.current, new Date())
+        // console.log(currentIndex, preIndexRef.current, new Date())
         preIndexRef.current = currentIndex;
     });
 
