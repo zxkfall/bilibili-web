@@ -4,18 +4,22 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Header from "@/components/Header";
 import Container from "@mui/material/Container";
 import SelfMainContent from "@/components/SelfMainContent";
-import Latest from "@/components/Latest";
 import Footer from "@/components/Footer";
 import {CardData} from "@/app/api/cards/route";
 import {ArticleInfo} from "@/app/api/articles/latested/route";
 import SubMenu from "@/components/SubMenu";
 import {CarouselData} from "@/app/api/carousel/route";
+import {useEffect} from "react";
 
-export default function IndexPageContainer({cardData, latestData, carouselData}: {
+export default function IndexPageContainer({cardData, carouselData}: {
     cardData: CardData[];
     latestData: ArticleInfo[];
     carouselData: CarouselData[];
 }) {
+
+    useEffect(() => {
+        scrollTo(0, 0);
+    }, []);
 
     return (
         <Box sx={{height: '100dvh', display: 'flex', flexDirection: 'column'}}>
@@ -29,7 +33,6 @@ export default function IndexPageContainer({cardData, latestData, carouselData}:
                     sx={{display: 'flex', flexDirection: 'column', mb: 16, mt: 3, gap: 4}}
                 >
                     <SelfMainContent cardData={cardData} carouselData={carouselData}/>
-                    {/*<Latest articleInfo={latestData}/>*/}
                 </Container>
             </Box>
             <Footer/>
