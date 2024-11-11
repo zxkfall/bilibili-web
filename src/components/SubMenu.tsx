@@ -13,6 +13,7 @@ import IconButton from "@mui/material/IconButton";
 import {Button, Container, Typography} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import * as React from "react";
+import MoreOptions from "@/components/MoreOptions";
 
 const SubMenu = () => {
     return (<Container
@@ -62,11 +63,13 @@ const SubMenu = () => {
             flexWrap: 'wrap',
         }}>
             {['番剧', '电影', '国创', '电视剧', '综艺', '纪录片', '动画', '游戏', '鬼畜',
-                '音乐', '舞蹈', '影视', '娱乐', '知识', '科技', '资讯', '美食', '更多']
+                '音乐', '舞蹈', '影视', '娱乐', '知识', '科技', '资讯', '美食',]
                 .map((item, index) =>
-                    <Button key={index} variant="text" sx={{color: 'text.primary'}}>{item}</Button>
+                    <Button key={index} variant="text" sx={{color: 'text.primary', flexBasis: '11.11%'}}>{item}</Button>
                 )
             }
+            <MoreOptions text={'更多'} sx={{flexBasis: '11.1%'}} items={['生活',
+                '动物圈', '虚拟UP主', '汽车', 'VLOG', '综艺', '时尚', '搞笑', '公开课', '运动', '单机游戏']}/>
         </Box>
         <Divider orientation="vertical" flexItem sx={{mx: 2}}/>
         <Box sx={{
