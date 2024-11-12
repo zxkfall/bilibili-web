@@ -15,15 +15,17 @@ const MoreOptions = ({text, items, sx}: { text: string, items: string[], sx?: Sx
             },
         }}
                 className={styles.container}>
-            <Box className={styles.box1} sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}>
-                <Typography>
-                    {text}
-                </Typography>
-                <KeyboardArrowDown fontSize={"small"} className={styles.arrowIcon}/>
+            <Box className={styles.box1}>
+                <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                    <Typography>
+                        {text}
+                    </Typography>
+                    <KeyboardArrowDown fontSize={"small"} className={styles.arrowIcon}/>
+                </Box>
             </Box>
             <Box className={styles.box2} sx={{}}>
                 <Box sx={{
