@@ -15,7 +15,9 @@ import Sitemark from "@/components/icons/SitemarkIcon";
 import MenuIcon from "@mui/icons-material/Menu";
 import Drawer from "@mui/material/Drawer";
 import {Search} from "@/components/SelfMainContent";
-import LoginPopup from "@/components/LoginPopup";
+import HoverPopup from "@/components/HoverPopup";
+import {Typography} from "@mui/material";
+import {Cloud, CommentBank, Star, Tv} from "@mui/icons-material";
 
 const StyledAppBar = styled(AppBar)(({theme}) => ({
     position: 'relative',
@@ -141,7 +143,72 @@ const Header = () => {
                         <Search/>
                     </Box>
                     <Box sx={{display: 'flex', gap: 1, alignItems: 'center', ml: 1}}>
-                        <LoginPopup theme={theme}/>
+                        <HoverPopup popupContent={<Box
+                            sx={{color: theme.palette.text.primary,}}
+                        >
+                            <Box sx={{
+                                display: 'flex',
+                                mt: 1,
+                                p: 1,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexDirection: 'column',
+                                gap: 1,
+                                backgroundColor: theme.palette.background.paper,
+                                borderRadius: 1,
+                            }}>
+                                <Typography variant="caption">登陆后你可以</Typography>
+                                <Box sx={{display: 'flex', flexDirection: 'row', gap: 3}}>
+                                    <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
+                                        <Box sx={{textWrap: 'nowrap'}}><Star sx={{mr: 1}}/> 收藏</Box>
+                                        <Box sx={{textWrap: 'nowrap'}}><Tv sx={{mr: 1}}/>高清视频</Box>
+                                    </Box>
+                                    <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
+                                        <Box sx={{textWrap: 'nowrap'}}><Cloud sx={{mr: 1}}/>多端同步</Box>
+                                        <Box sx={{textWrap: 'nowrap'}}><CommentBank sx={{mr: 1}}/>评论</Box>
+                                    </Box>
+                                </Box>
+                                <Box
+                                    sx={{
+                                        gap: 1,
+                                        alignItems: 'center',
+                                        backgroundColor: 'background.default',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        mt: 1,
+                                    }}
+                                >
+                                    <Button color="primary" variant="contained" size="small" fullWidth>
+                                        Sign in
+                                    </Button>
+                                    <Box>
+                                        <Typography variant="caption" color="primary">没有账号？</Typography>
+                                        <Button color="primary" variant="text" size="small">
+                                            Click me to Sign up
+                                        </Button>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Box>}>
+                            <Box
+                                sx={{
+                                    display: {xs: 'none', md: 'flex'},
+                                    textAlign: 'center',
+                                    alignItems: 'center',
+                                    backgroundColor: 'primary.main',
+                                    color: 'primary.contrastText',
+                                    borderRadius: '50%',
+                                    width: 32,
+                                    height: 32,
+                                    lineHeight: 1,
+                                    '&:hover': {
+                                        backgroundColor: 'primary.dark',
+                                    },
+                                }}
+                            >
+                                Sign in
+                            </Box>
+                        </HoverPopup>
                         <FormControl variant="outlined" sx={{minWidth: {lg: 180, md: 160}}}>
                             <Select
                                 ref={selectRef}

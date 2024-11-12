@@ -1,0 +1,23 @@
+.container {
+    position: relative;
+}
+
+.triggerButton {
+
+}
+
+.popup {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 100%;
+    left: calc(100% - (256px + 100%) / 2);
+    background-color: transparent;
+    z-index: 100;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.container:hover .popup {
+    opacity: 1;
+    visibility: visible;
+}
