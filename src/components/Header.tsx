@@ -18,8 +18,9 @@ import {Search} from "@/components/SelfMainContent";
 import HoverPopup from "@/components/HoverPopup";
 import {Typography} from "@mui/material";
 import {Cloud, CommentBank, Star, Tv} from "@mui/icons-material";
+import StickySubMenu from "@/components/StickySubMenu";
 
-const StyledAppBar = styled(AppBar)(({theme}) => ({
+export const StyledAppBar = styled(AppBar)(({theme}) => ({
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
@@ -43,6 +44,7 @@ const Header = () => {
     const themeRef = React.useRef(theme);
     const headerRef = React.useRef<HTMLDivElement>(null);
     const selectRef = useRef<HTMLSelectElement>(null);
+    const [showStickySubMenu, setShowStickySubMenu] = useState(false);
 
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
@@ -66,7 +68,7 @@ const Header = () => {
             if (window.scrollY > headerElement.clientHeight) {
                 headerElement.style.position = 'fixed';
                 headerElement.style.backgroundColor = themeRef.current.palette.background.paper;
-                headerElement.style.borderBottom = `1px solid ${theme.palette.grey.A700}`;
+                headerElement.style.borderBottom = `1px solid ${theme.palette.grey.A400}`;
                 headerElement.style.backdropFilter = 'blur(24px)';
                 themeSelect.style.border = '1px solid hsl(220, 20%, 88%)';
                 themeSelect.style.boxShadow = `inset 0 1px 0 1px hsla(220, 0%, 100%, 0.6),inset 0 -1px 0 1px hsla(220, 35%, 90%, 0.5)`;
@@ -80,6 +82,15 @@ const Header = () => {
                 themeSelect.style.border = 'none';
                 themeSelect.style.boxShadow = 'none';
                 themeLightAndNight.style.border = 'none';
+            }
+        }
+
+        const mySubMenu = document.getElementById('mySubMenuId');
+        if (mySubMenu) {
+            if (window.scrollY > (mySubMenu.clientHeight + mySubMenu.offsetHeight + 128)) {
+                setShowStickySubMenu(() => true);
+            } else {
+                setShowStickySubMenu(() => false);
             }
         }
     }
@@ -257,6 +268,8 @@ const Header = () => {
                     </Box>
                 </Toolbar>
             </StyledAppBar>
+            {showStickySubMenu && <StickySubMenu/>}
+            {/*<StickySubMenu/>*/}
             <Box>
                 <CardMedia
                     component="img"
