@@ -1,10 +1,11 @@
 import React from 'react';
 import Box from "@mui/material/Box";
 import {StyledAppBar} from "@/components/Header";
-import {Cyclone, Whatshot} from "@mui/icons-material";
+import {Cyclone, KeyboardArrowDown, Whatshot} from "@mui/icons-material";
 import {Button, Container, Typography} from "@mui/material";
 import {grey} from "@mui/material/colors";
 import Divider from "@mui/material/Divider";
+import styles from "@/components/StickySubMenu.module.css";
 
 const StickySubMenu = () => {
     return (
@@ -15,6 +16,7 @@ const StickySubMenu = () => {
             width: '100%',
         }}><StyledAppBar>
             <Container
+                className={styles.container}
                 id="mySubMenuId"
                 maxWidth="xl"
                 sx={{
@@ -24,7 +26,7 @@ const StickySubMenu = () => {
                     gap: 3,
                     p: 1,
                     px: 3,
-                    maxHeight: '48px',
+                    maxHeight: '52px',
                     overflow: 'hidden',
                     transition: 'max-height 0.5s ease',
                     '&:hover': {
@@ -92,6 +94,15 @@ const StickySubMenu = () => {
                         )
                     }
                 </Box>
+
+                <KeyboardArrowDown fontSize={"small"} className={styles.arrowIcon} sx={{
+                    color: 'text.primary',
+                    mt: 1,
+                    borderRadius: 0.5,
+                    '&:hover': {
+                        backgroundColor: grey[300],
+                    },
+                }}/>
             </Container>
         </StyledAppBar>
         </Box>

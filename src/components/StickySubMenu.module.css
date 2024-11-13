@@ -1,0 +1,7 @@
+.container:hover .arrowIcon {
+    transform: rotate(180deg);
+}
+
+.arrowIcon {
+    transition: transform 0.5s ease;
+}
