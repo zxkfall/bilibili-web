@@ -14,6 +14,7 @@ import {Button, Container, Typography} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import * as React from "react";
 import MoreOptions from "@/components/MoreOptions";
+import styles from './SubMenu.module.css';
 
 const SubMenu = () => {
     return (<Container
@@ -77,9 +78,15 @@ const SubMenu = () => {
             display: 'grid',
             justifyItems: 'start',
         }}>
-            {[{icon: <TextSnippet/>, value: '专栏'}, {icon: <Videocam/>, value: '直播'},
-                {icon: <Forum/>, value: '社区中心'}, {icon: <SentimentSatisfied/>, value: '课堂'},
-                {icon: <Flag/>, value: '活动'}, {icon: <LibraryMusic/>, value: '新歌热榜'}]
+            {[{icon: <TextSnippet className={styles.hideInSmall}/>, value: '专栏'}, {
+                icon: <Videocam className={styles.hideInSmall}/>, value: '直播'
+            },
+                {icon: <Forum className={styles.hideInSmall}/>, value: '社区中心'}, {
+                    icon: <SentimentSatisfied className={styles.hideInSmall}/>, value: '课堂'
+                },
+                {icon: <Flag className={styles.hideInSmall}/>, value: '活动'}, {
+                    icon: <LibraryMusic className={styles.hideInSmall}/>, value: '新歌热榜'
+                }]
                 .map((item, index) =>
                     <Button key={index} variant="text"
                             sx={{
