@@ -41,7 +41,13 @@ const MoreOptions = ({text, items, sx}: {
                     gap: 1,
                 }}>{items.map((item, index) =>
                     <Button key={index} href={item.url} target="_blank" variant="text"
-                            sx={{color: 'text.primary', p: 0}}>{item.value}</Button>
+                            sx={{
+                                color: 'text.primary',
+                                p: 0.5,
+                                minWidth: 'fit-content',
+                                width: '52px',
+                                height: '32px'
+                            }}>{item.value}</Button>
                 )
                 }</Box>
             </Box>

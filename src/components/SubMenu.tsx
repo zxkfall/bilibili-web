@@ -56,7 +56,9 @@ const SubMenu = () => {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            gap: 3,
+            gap: {
+                xs: 0.2, sm: 0.5, md: 1, lg: 3
+            },
             pt: 2,
             px: 3,
         }}>
@@ -89,19 +91,38 @@ const SubMenu = () => {
                         <Typography variant="caption">{item.value}</Typography>
                     </Box>)}
         </Box>
-        <Box className={styles.itemContainer}>
+        <Box className={styles.itemContainer} sx={{
+            display: {
+                xs:'flex',
+                sm:'grid',
+                md:'grid'
+            },
+            flexWrap: 'wrap'
+        }}>
             {allCategories.map((item, index) =>
                 <Button className={styles.itemSize} href={item.url} target="_blank" key={index} variant="text"
-                        sx={{color: 'text.primary', p: 0}}>{item.value}</Button>
+                        sx={{
+                            color: 'text.primary',
+                            p: 0.5,
+                            minWidth: 'fit-content',
+                            width: '52px',
+                            height: '32px'
+                        }}>{item.value}</Button>
             )}
             <Box className={styles.hideInLarge}>
                 <MoreOptions text={'更多'} items={allCategories}/>
             </Box>
         </Box>
-        <Divider orientation="vertical" flexItem sx={{mx: 2}}/>
+        <Divider orientation="vertical" flexItem sx={{xs: 0.2, mx: {sm: 0.5, md: 1, lg: 2}}}/>
         <Box sx={{
-            display: 'grid',
+            display: {
+                xs:'flex',
+                sm:'grid',
+                md:'grid'
+            },
+            // flexDirection:'column',
             justifyItems: 'start',
+            flexWrap: 'wrap',
         }}>
             {[{icon: <TextSnippet className={styles.hideInSmall}/>, value: '专栏'}, {
                 icon: <Videocam className={styles.hideInSmall}/>, value: '直播'
@@ -120,7 +141,14 @@ const SubMenu = () => {
                                 gridRow: `${Math.ceil((index + 1) / 3)} / ${Math.ceil((index + 1) / 3) + 1}`,
                                 textWrap: 'nowrap',
                                 flexWrap: 'nowrap',
-                                width: 'max-content',
+                                // width: 'max-content',
+                                width: {
+                                    xs: 'fit-content', sm: 'fit-content', md: 'max-content', lg: 'max-content'
+                                },
+                                minWidth: 'fit-content',
+                                px: {
+                                    xs: 0.5, sm: 0.5, md: 1, lg: 1
+                                }
                             }}
                             startIcon={item.icon}
 
