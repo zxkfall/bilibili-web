@@ -11,6 +11,13 @@
     background-color: transparent;
     z-index: 100;
     transition: opacity 0.3s ease, visibility 0.3s ease;
+
+}
+
+.popUp{
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(4, 1fr);
 }
 
 .container:hover .box2 {
@@ -25,4 +32,28 @@
 
 .arrowIcon {
     transition: transform 0.3s ease;
+}
+
+@media screen and (min-width: 0) and (max-width: 600px) {
+    .popUp > *:nth-of-type(-1n + 9) {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 900px) {
+    .popUp > *:nth-of-type(-1n + 13) {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1200px) {
+    .popUp > *:nth-of-type(-1n + 17) {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1536px) {
+    .popUp > *:nth-of-type(-1n + 21) {
+        display: none !important;
+    }
 }

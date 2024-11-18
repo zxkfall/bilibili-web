@@ -6,7 +6,11 @@ import {KeyboardArrowDown} from "@mui/icons-material";
 import {Theme} from "@mui/material/styles";
 import {grey} from "@mui/material/colors";
 
-const MoreOptions = ({text, items, sx}: { text: string, items: string[], sx?: SxProps<Theme> }) => {
+const MoreOptions = ({text, items, sx}: {
+    text: string,
+    items: { url: string, value: string }[],
+    sx?: SxProps<Theme>,
+}) => {
     return (
         <Button component="div" variant="text" sx={{
             color: 'text.primary', cursor: 'default', ...sx,
@@ -28,21 +32,17 @@ const MoreOptions = ({text, items, sx}: { text: string, items: string[], sx?: Sx
                 </Box>
             </Box>
             <Box className={styles.box2} sx={{}}>
-                <Box sx={{
+                <Box className={styles.popUp} sx={{
                     borderRadius: 1,
                     border: '1px solid #ddd',
                     backgroundColor: 'white',
                     mt: 1,
                     p: 1,
-                    display: 'flex',
-                    width: '256px',
-                    flexWrap: 'wrap',
                     gap: 1,
-                    justifyContent: 'center',
-                }}>{items
-                    .map((item, index) =>
-                        <Button key={index} variant="text" sx={{color: 'text.primary'}}>{item}</Button>
-                    )
+                }}>{items.map((item, index) =>
+                    <Button key={index} href={item.url} target="_blank" variant="text"
+                            sx={{color: 'text.primary', p: 0}}>{item.value}</Button>
+                )
                 }</Box>
             </Box>
         </Button>
