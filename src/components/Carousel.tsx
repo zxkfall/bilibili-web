@@ -88,7 +88,7 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
             startTimer();
             return () => {
                 if (timeoutRef.current) {
-                    clearTimeout(timeoutRef.current); // 清理定时器
+                    clearTimeout(timeoutRef.current);
                     timeoutRef.current = null;
                 }
             };
@@ -421,10 +421,8 @@ const Carousel = ({images, onCarouselClick, enableTimer = true, timerInterval = 
                                     }}></Box>
                             </Box>
                         ))}
-
                     </Box>
                 </Box>
-
             </Box>
         </Box>
     );

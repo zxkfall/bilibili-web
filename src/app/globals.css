@@ -3,16 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --circle-diameter: 10px;
+    --background: #ffffff;
+    --foreground: #171717;
+    --circle-diameter: 10px;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
+}
+
+.appCustomButton {
+    padding: 4px;
+    min-width: fit-content;
+    height: 32px;
+    white-space: nowrap;
 }
 
 /*body {*/
