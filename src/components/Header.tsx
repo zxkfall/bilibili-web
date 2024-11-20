@@ -43,8 +43,8 @@ const Header = () => {
     const {themeType, setThemeType, mode, setMode, theme} = useCustomTheme();
     const themeRef = React.useRef(theme);
     const headerRef = React.useRef<HTMLDivElement>(null);
-    const selectRef = useRef<HTMLSelectElement>(null);
     const [showStickySubMenu, setShowStickySubMenu] = useState(false);
+    const [showFixedHeader, setShowFixedHeader] = useState(false);
 
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
@@ -61,37 +61,13 @@ const Header = () => {
 
     const changeHeaderStyle = () => {
         const headerElement = headerRef.current;
-        const themeSelect = selectRef.current;
-        const themeLightAndNight = document.getElementById('theme-light-night-button');
-
-        if (headerElement && themeSelect && themeLightAndNight) {
-            if (window.scrollY > headerElement.clientHeight) {
-                headerElement.style.position = 'fixed';
-                headerElement.style.backgroundColor = themeRef.current.palette.background.paper;
-                headerElement.style.borderBottom = `1px solid ${theme.palette.grey.A400}`;
-                headerElement.style.backdropFilter = 'blur(24px)';
-                themeSelect.style.border = '1px solid hsl(220, 20%, 88%)';
-                themeSelect.style.boxShadow = `inset 0 1px 0 1px hsla(220, 0%, 100%, 0.6),inset 0 -1px 0 1px hsla(220, 35%, 90%, 0.5)`;
-                themeLightAndNight.style.border = '1px solid hsl(220, 20%, 88%)';
-
-            } else {
-                headerElement.style.position = 'absolute';
-                headerElement.style.backgroundColor = 'transparent';
-                headerElement.style.borderBottom = 'none';
-                headerElement.style.backdropFilter = 'none';
-                themeSelect.style.border = 'none';
-                themeSelect.style.boxShadow = 'none';
-                themeLightAndNight.style.border = 'none';
-            }
+        if (headerElement) {
+            setShowFixedHeader(window.scrollY > headerElement.clientHeight);
         }
 
         const mySubMenu = document.getElementById('mySubMenuId');
         if (mySubMenu) {
-            if (window.scrollY > (mySubMenu.clientHeight + mySubMenu.offsetHeight + 128)) {
-                setShowStickySubMenu(() => true);
-            } else {
-                setShowStickySubMenu(() => false);
-            }
+            setShowStickySubMenu(window.scrollY > (mySubMenu.clientHeight + mySubMenu.offsetHeight + 128));
         }
     }
 
@@ -121,7 +97,15 @@ const Header = () => {
 
     return (
         <>
-            <StyledAppBar ref={headerRef}>
+            <StyledAppBar ref={headerRef} sx={showFixedHeader ? {
+                position: 'fixed',
+                backgroundColor: theme.palette.background.paper,
+            } : {
+                position: 'absolute',
+                backgroundColor: 'transparent',
+                borderBottom: 'none',
+                backdropFilter: 'none',
+            }}>
                 <Toolbar
                     variant="dense"
                     disableGutters
@@ -222,7 +206,6 @@ const Header = () => {
                         </HoverPopup>
                         <FormControl variant="outlined" sx={{minWidth: {lg: 180, md: 160}}}>
                             <Select
-                                ref={selectRef}
                                 size="small"
                                 labelId="theme-select-label"
                                 id="theme-select"
@@ -230,7 +213,12 @@ const Header = () => {
                                 onChange={handleChange}
                                 label="Design Language"
                                 variant="outlined"
-                                sx={{backgroundColor: 'transparent'}}
+                                sx={{
+                                    backgroundColor: 'transparent', ...(showFixedHeader ? {} : {
+                                        border: 'none',
+                                        boxShadow: 'none',
+                                    })
+                                }}
                             >
                                 <MenuItem value="custom">Custom Theme</MenuItem>
                                 <MenuItem value="material">Material Design 2</MenuItem>
@@ -240,7 +228,7 @@ const Header = () => {
                             data-screenshot="toggle-mode"
                             mode={mode}
                             toggleColorMode={toggleColorMode}
-                            sx={{backgroundColor: 'transparent'}}
+                            sx={{backgroundColor: 'transparent', ...(showFixedHeader ? {} : {border: 'none'})}}
                         />
                         <Box sx={{display: {sm: 'flex', md: 'none'}}}>
                             <IconButton aria-label="Menu button" onClick={toggleDrawer(!open)} size="small"

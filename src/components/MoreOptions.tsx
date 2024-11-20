@@ -12,13 +12,11 @@ const MoreOptions = ({text, items, sx}: {
     sx?: SxProps<Theme>,
 }) => {
     return (
-        <Button component="div" variant="text" sx={{
-            color: 'text.primary', cursor: 'default', ...sx,
-            '&:active': {
-                backgroundColor: grey[100],
-            },
+        <Box component="button" sx={{
+            cursor: 'default',
+            ...sx,
         }}
-                className={styles.container}>
+             className={styles.container + ' appCustomButton'}>
             <Box className={styles.box1}>
                 <Box sx={{
                     display: 'flex',
@@ -40,18 +38,12 @@ const MoreOptions = ({text, items, sx}: {
                     p: 1,
                     gap: 1,
                 }}>{items.map((item, index) =>
-                    <Button key={index} href={item.url} target="_blank" variant="text"
-                            sx={{
-                                color: 'text.primary',
-                                p: 0.5,
-                                minWidth: 'fit-content',
-                                width: '52px',
-                                height: '32px'
-                            }}>{item.value}</Button>
+                    <Button className={'appCustomButton'} key={index} href={item.url} target="_blank"
+                            variant="text">{item.value}</Button>
                 )
                 }</Box>
             </Box>
-        </Button>
+        </Box>
     );
 };
 
