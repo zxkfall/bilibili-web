@@ -8,6 +8,38 @@ import Divider from "@mui/material/Divider";
 import styles from "@/components/StickySubMenu.module.css";
 
 const StickySubMenu = () => {
+
+    const allCategories = [
+        {url: 'anime', value: '番剧'},
+        {url: 'movie', value: '电影'},
+        {url: 'domestic-animation', value: '国创'},
+        {url: 'tv-drama', value: '电视剧'},
+        {url: 'variety-show', value: '综艺'},
+        {url: 'documentary', value: '纪录片'},
+        {url: 'animation', value: '动画'},
+        {url: 'game', value: '游戏'},
+        {url: 'funny', value: '鬼畜'},
+        {url: 'music', value: '音乐'},
+        {url: 'dance', value: '舞蹈'},
+        {url: 'film-review', value: '影视'},
+        {url: 'entertainment', value: '娱乐'},
+        {url: 'knowledge', value: '知识'},
+        {url: 'technology', value: '科技'},
+        {url: 'news', value: '资讯'},
+        {url: 'food', value: '美食'},
+        {url: 'life', value: '生活'},
+        {url: 'cars', value: '汽车'},
+        {url: 'fashion', value: '时尚'},
+        {url: 'sports', value: '运动'},
+        {url: 'animals', value: '动物圈'},
+        {url: 'vlog', value: 'VLOG'},
+        {url: 'funny', value: '搞笑'},
+        {url: 'single-player-games', value: '单机游戏'},
+        {url: 'virtual-up', value: '虚拟UP主'},
+        {url: 'love', value: '公益'},
+        {url: 'open-class', value: '公开课'},
+    ];
+
     return (
         <Box sx={{
             position: 'fixed',
@@ -70,28 +102,26 @@ const StickySubMenu = () => {
                     rowGap: 1,
                     mt: 1,
                 }}>
-                    {['番剧', '电影', '国创', '电视剧', '综艺', '纪录片', '动画', '游戏', '鬼畜',
-                        '专栏', '活动', '社区中心', '娱乐', '知识', '科技', '资讯', '美食', '生活',
-                        '动物圈', '虚拟UP主', '汽车', '直播', '课堂', '新歌热榜', '搞笑', '公开课',
-                        '运动', '单机游戏', '音乐', '舞蹈', '影视', 'VLOG', '综艺', '时尚']
-                        .map((item, index) =>
-                            <Button key={index} variant="text"
-                                    size="small"
-                                    sx={{
-                                        backgroundColor: grey[300],
-                                        flexBasis: '7.6%',
-                                        pt: 0.25,
-                                        pb: 0.25,
-                                        px: 1,
-                                        borderRadius: 0.5,
-                                        fontSize: '14px',
-                                        height: 'fit-content',
-                                        textWrap: 'nowrap',
-                                        '&:hover': {
-                                            backgroundColor: grey[500],
-                                        },
-                                    }}>{item}</Button>
-                        )
+                    {allCategories.map((item, index) =>
+                        <Button key={index} variant="text"
+                                size="small"
+                                href={item.url}
+                                target={'_blank'}
+                                sx={{
+                                    backgroundColor: grey[300],
+                                    flexBasis: '7.6%',
+                                    pt: 0.25,
+                                    pb: 0.25,
+                                    px: 1,
+                                    borderRadius: 0.5,
+                                    fontSize: '14px',
+                                    height: 'fit-content',
+                                    textWrap: 'nowrap',
+                                    '&:hover': {
+                                        backgroundColor: grey[500],
+                                    },
+                                }}>{item.value}</Button>
+                    )
                     }
                 </Box>
 

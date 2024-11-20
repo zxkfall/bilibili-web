@@ -16,7 +16,7 @@ import * as React from "react";
 import MoreOptions from "@/components/MoreOptions";
 import styles from './SubMenu.module.css';
 
-const SubMenu = () => {
+const SubMenu = ({urlTarget = '_blank'}: { urlTarget?: string }) => {
 
     const allCategories = [
         {url: 'anime', value: '番剧'},
@@ -106,14 +106,14 @@ const SubMenu = () => {
             justifyContent: 'start',
         }}>
             {allCategories.map((item, index) =>
-                <Button className={styles.itemSize + ' appCustomButton'} href={item.url} target="_blank" key={index}
+                <Button className={styles.itemSize + ' appCustomButton'} href={item.url} target={urlTarget} key={index}
                         variant="text">{item.value}</Button>
             )}
             <Button component="div" className={styles.hideInLarge + ' appCustomButton'} sx={{
                 textAlign: 'center',
                 cursor: 'default',
             }}>
-                <MoreOptions text={'更多'} items={allCategories}/>
+                <MoreOptions urlTarget={urlTarget} text={'更多'} items={allCategories} sx={{cursor: 'default'}}/>
             </Button>
         </Box>
         <Divider orientation="vertical" flexItem sx={{xs: 0.2, mx: {sm: 0.5, md: 1, lg: 2}}}/>

@@ -1,6 +1,10 @@
-@media screen and (max-width: 1200px) {
+.hideInSmall {
+    display: block;
+}
+
+@media screen and (min-width: 0px) and (max-width: 1200px) {
     .hideInSmall {
-        display: none;
+        display: none !important;
     }
 }
 
@@ -17,7 +21,7 @@
 }
 
 .itemContainer {
-    grid-template-columns: repeat(9, 1fr);
+    /*grid-template-columns: repeat(9, 1fr);*/
     display: grid;
     width: 100%;
     grid-auto-flow: column;
@@ -42,7 +46,7 @@
     }
 
     .itemContainer > *:nth-of-type(1n + 10) {
-        display: none !important;
+        display: none;
     }
 }
 
@@ -53,7 +57,7 @@
     }
 
     .itemContainer > *:nth-of-type(1n + 14) {
-        display: none !important;
+        display: none;
     }
 }
 
@@ -63,7 +67,7 @@
     }
 
     .itemContainer > *:nth-of-type(1n + 18) {
-        display: none !important;
+        display: none;
     }
 }
 
@@ -73,7 +77,7 @@
     }
 
     .itemContainer > *:nth-of-type(1n + 22) {
-        display: none !important;
+        display: none;
     }
 }
 
@@ -83,6 +87,6 @@
     }
 
     .hideInLarge {
-        display: none;
+        display: none !important;
     }
 }

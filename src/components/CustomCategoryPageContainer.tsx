@@ -9,16 +9,16 @@ import Footer from "@/components/Footer";
 const CustomCategoryPageContainer = ({category}: { category: string }) => {
     return (
         <Box sx={{height: '100dvh', display: 'flex', flexDirection: 'column'}}>
+            <CssBaseline enableColorScheme/>
             <Header/>
-            <SubMenu/>
+            <SubMenu urlTarget={'_self'}/>
             <Box sx={{flex: '1 1', overflow: 'visible'}}>
-                <CssBaseline enableColorScheme/>
                 <Container
                     maxWidth="xl"
                     component="main"
                     sx={{display: 'flex', flexDirection: 'column', mb: 16, mt: 3, gap: 4}}
                 >
-                    dsfasfawerfawsfwaefawefwaefwasef {category}
+                    This is {category} page, show some content
                 </Container>
             </Box>
             <Footer/>

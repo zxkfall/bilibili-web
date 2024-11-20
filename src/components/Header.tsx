@@ -8,7 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, {SelectChangeEvent} from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import ToggleColorMode from "@/components/ToggleColorMode";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useCustomTheme} from "@/providers/ThemeContext";
 import CardMedia from "@mui/material/CardMedia";
 import Sitemark from "@/components/icons/SitemarkIcon";
