@@ -14,7 +14,9 @@
     "@fontsource/roboto": "^5.1.0",
     "@mui/icons-material": "^6.1.2",
     "@mui/material": "^6.1.2",
+    "dashjs": "^4.7.4",
     "flv.js": "^1.6.2",
+    "hls.js": "^1.5.17",
     "next": "14.2.14",
     "react": "^18",
     "react-dom": "^18"

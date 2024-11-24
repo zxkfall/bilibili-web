@@ -40,3 +40,20 @@ helps:
 https://www.bento4.com/documentation/mp4fragment/
 https://www.bento4.com/documentation/mp4info/
 
+## HLS transfer
+```bash
+ffmpeg -re -i example.mp4 -c copy -f hls -hls_list_size 0 -bsf:v h264_mp4toannexb output.m3u8
+```
+
+hls 由apple 主导的协议，所以Chrome不支持，可以通过hls.js，使用MSE进行转换
+
+## DASH trasnfer
+
+https://developer.mozilla.org/zh-CN/docs/Web/Media/DASH_Adaptive_Streaming_for_HTML_5_Video
+
+```bash
+ffmpeg -i frag_bunny.mp4 \                                                                      
+  -map 0:v:0 -map 0:a:0 \
+  -c:v libx264 -b:v 1000k -c:a aac -b:a 128k \
+  -f dash output-dash.mpd
+```
